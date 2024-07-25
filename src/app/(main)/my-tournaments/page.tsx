@@ -31,11 +31,11 @@ const DUMMY_DATA = [
 /**
  * Trending tournaments list page
  */
-export default function Trending(): JSX.Element {
+export default function MyTournaments(): JSX.Element {
   return (
     <Container>
       <Stack>
-        <h1>Trending Tournaments</h1>
+        <h1>My Tournaments</h1>
         <List>
           {DUMMY_DATA.map(tournamentData => (
             <TournamentListItem

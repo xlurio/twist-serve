@@ -22,7 +22,7 @@ export default function NavigationBarDrawerMenu(): JSX.Element {
         icon={<SportsTennisIcon />}
       />
       <NavigationBarDrawerItem
-        href="#"
+        href="/my-tournaments/"
         primary="My Tournaments"
         icon={<EmojiEventsIcon />}
       />
