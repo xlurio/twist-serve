@@ -48,7 +48,7 @@ export default function NavigationBar(): JSX.Element {
   return (
     <AppBar position="static">
       <Toolbar>
-        <NavigationBarDrawer />
+        {isAuthenticated ? <NavigationBarDrawer /> : ''}
         <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
           <Link color="inherit" underline="none" variant="inherit" href="/">
             Royal

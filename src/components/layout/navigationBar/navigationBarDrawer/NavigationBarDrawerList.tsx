@@ -27,8 +27,8 @@ export default function NavigationBarDrawerMenu(): JSX.Element {
         icon={<EmojiEventsIcon />}
       />
       <NavigationBarDrawerItem
-        href="#"
-        primary="My Institutions"
+        href="/my-organizations/"
+        primary="My Organizations"
         icon={<BusinessIcon />}
       />
     </List>
