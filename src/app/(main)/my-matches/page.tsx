@@ -1,4 +1,4 @@
-import PlayerGameItem from '@/components/player-games/PlayerGameItem';
+import PlayerMatchItem from '@/components/player-matches/PlayerMatchItem';
 import {Container, Grid, List} from '@mui/material';
 
 const DUMMY_DATA = [
@@ -39,7 +39,7 @@ export default function PlayerMatches() {
           <h1>My Games</h1>
           <List>
             {DUMMY_DATA.map(matchData => (
-              <PlayerGameItem
+              <PlayerMatchItem
                 key={matchData.id}
                 player1={matchData.player1}
                 player1Score={matchData.player1Score}

@@ -1,5 +1,11 @@
 'use client';
-import {ListItem, ListItemText, ListItemAvatar, Avatar} from '@mui/material';
+import {
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+  ListItemButton,
+} from '@mui/material';
 import theme from '@/theme';
 
 /**
@@ -17,15 +23,17 @@ export default function TournamentListItem({
   tournamentAvatar: string;
 }): JSX.Element {
   return (
-    <ListItem>
-      <ListItemAvatar>
-        <Avatar
-          sx={{backgroundColor: theme.palette.common.white}}
-          alt="tournament-badge"
-          src={tournamentAvatar}
-        ></Avatar>
-      </ListItemAvatar>
-      <ListItemText primary={name} secondary={`${location} | ${period}`} />
+    <ListItem disablePadding>
+      <ListItemButton>
+        <ListItemAvatar>
+          <Avatar
+            sx={{backgroundColor: theme.palette.common.white}}
+            alt="tournament-badge"
+            src={tournamentAvatar}
+          ></Avatar>
+        </ListItemAvatar>
+        <ListItemText primary={name} secondary={`${location} | ${period}`} />
+      </ListItemButton>
     </ListItem>
   );
 }
