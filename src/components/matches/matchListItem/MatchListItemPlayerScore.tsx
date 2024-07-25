@@ -4,7 +4,7 @@ import {Grid, Typography} from '@mui/material';
 /**
  * Component that renders the score of one player or double
  */
-export default function PlayerMatchItemScore({
+export default function MatchListItemPlayerScore({
   player,
   score,
 }: {

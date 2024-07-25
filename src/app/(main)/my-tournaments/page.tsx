@@ -1,5 +1,5 @@
 import {Container, List, Stack} from '@mui/material';
-import TournamentListItem from '@/components/trending/TournamentListItem';
+import TournamentListItem from '@/components/tournaments/TournamentListItem';
 
 const DUMMY_DATA = [
   {

@@ -5,12 +5,12 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import PlayerMatchItemScore from './playerMatchItem/PlayerMatchItemScore';
+import MatchListItemPlayerScore from './matchListItem/MatchListItemPlayerScore';
 
 /**
  * Component representing the items in the player's matches list
  */
-export default function PlayerMatchItem({
+export default function MatchListItem({
   player1,
   player1Score,
   player2,
@@ -30,8 +30,8 @@ export default function PlayerMatchItem({
           primary={
             <Stack>
               <Typography variant="caption">{date}</Typography>
-              <PlayerMatchItemScore player={player1} score={player1Score} />
-              <PlayerMatchItemScore player={player2} score={player2Score} />
+              <MatchListItemPlayerScore player={player1} score={player1Score} />
+              <MatchListItemPlayerScore player={player2} score={player2Score} />
             </Stack>
           }
         ></ListItemText>

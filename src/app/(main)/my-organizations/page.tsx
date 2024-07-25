@@ -1,17 +1,13 @@
+import OrganizationListItem from '@/components/organizations/OrganizationListItem';
 import {
-  Avatar,
   Container,
-  Grid,
   List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
   Stack,
-  Typography,
 } from '@mui/material';
 
 const DUMMY_DATA = [
   {
+    id: 1,
     avatar:
       'https://static.wixstatic.com/media/' +
       'c526a9_1f60b3212b9e48688b0656e726cf8440~mv2.png/v1/fill/' +
@@ -19,6 +15,7 @@ const DUMMY_DATA = [
     name: 'American Tennis Association',
   },
   {
+    id: 2,
     avatar:
       'https://upload.wikimedia.org/wikipedia/en/thumb/6/68/' +
       'Asian_Tennis_Fedration%27s_official_logo.png/' +
@@ -26,6 +23,7 @@ const DUMMY_DATA = [
     name: 'Asian Tennis Federation',
   },
   {
+    id: 3,
     avatar:
       'https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/' +
       'NATF_Logo.jpg/85px-NATF_Logo.jpg',
@@ -33,6 +31,9 @@ const DUMMY_DATA = [
   },
 ];
 
+/**
+ * List of organizations related to the player
+ */
 export default function MyOrganizations(): JSX.Element {
   return (
     <Container>
@@ -40,36 +41,11 @@ export default function MyOrganizations(): JSX.Element {
         <h1>My Organizations</h1>
         <List>
           {DUMMY_DATA.map(regulatorData => (
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemText
-                  primary={
-                    <Grid container columnGap={1}>
-                      <Grid
-                        item
-                        xs={2}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Avatar src={regulatorData.avatar} />
-                      </Grid>
-                      <Grid
-                        item
-                        xs={9}
-                        style={{display: 'flex', alignItems: 'center'}}
-                      >
-                        <Typography variant="h6">
-                          {regulatorData.name}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  }
-                />
-              </ListItemButton>
-            </ListItem>
+            <OrganizationListItem
+              key={regulatorData.id}
+              avatar={regulatorData.avatar}
+              name={regulatorData.name}
+            />
           ))}
         </List>
       </Stack>
