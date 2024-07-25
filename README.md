@@ -6,7 +6,7 @@ The front end of the companion for tennis players.
 
 # Description
 
-Twist Serve is a companion for tennis players. It allows you to check your current and future matches. It also allows you to manage tournaments and leagues.
+Twist Serve is a companion for tennis players. It allows you to check your current and future matches. It also allows you to manage tournaments and leagues. This includes subscribing to the tournaments and leagues owned by our partners.
 
 # Technology Stack
 
