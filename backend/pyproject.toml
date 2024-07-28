@@ -1,0 +1,68 @@
+[tool.mypy]
+strict = true
+exclude = ["venv", ".venv"]
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+disable_error_code = ["return", "no-any-return", "misc"]
+
+[[tool.mypy.overrides]]
+module = "factory.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "*.models"
+disable_error_code = ["return", "no-any-return", "misc", "attr-defined"]
+
+[tool.django-stubs]
+django_settings_module = "app.settings"
+
+[tool.ruff]
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ARG001", # unused arguments in functions
+]
+ignore = [
+    "B009",
+    "B010",
+    "B018",
+    "B904",
+    "E402",
+    "E501",
+    "W191"
+]
+
+[tool.ruff.lint.pyupgrade]
+# Preserve types, even if a file imports `from __future__ import annotations`.
+keep-runtime-typing = true
+
+[tool.pylint]
+disable=["broad-exception-caught",
+         "django-not-configured",
+         "import-outside-toplevel",
+         "inconsistent-return-statements",
+         "missing-class-docstring", 
+         "missing-function-docstring",
+         "missing-module-docstring", 
+         "protected-access",
+         "too-few-public-methods",
+         "too-many-ancestors",
+         "wrong-import-position"]
+
+load-plugins=["pylint_django"]
+
+[tool.pylint.design]
+max-args = 3
+max-branches = 1
+max-module-lines=200
+max-statements = 10
+
+[tool.pylint.refactor]
+max-nested-blocks = 1

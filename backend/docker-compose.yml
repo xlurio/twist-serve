@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:16.3
+    environment:
+      POSTGRES_USER: twistserve
+      POSTGRES_PASSWORD: twistserve
+      POSTGRES_DB: twistserve
+
+  rabbitmq:
+    image: rabbitmq:3.13
+    environment:
+      RABBITMQ_DEFAULT_USER: twistserve
+      RABBITMQ_DEFAULT_PASS: twistserve
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - 8025:8025
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh -c "celery --app django worker --pool solo"
+    volumes:
+      - .:/app
+    depends_on:
+      - rabbitmq
+      - redis
+      - postgres
+      - mailhog
+
+  redis:
+    image: redis:7.2.5
+
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - ./django.log:/var/log/django.log
+      - ./gunicorn.access.log:/var/log/gunicorn.access.log
+      - ./gunicorn.error.log:/var/log/gunicorn.error.log
+    depends_on:
+      - redis
+      - postgres
+      - mailhog
+
+  nginx:
+    image: nginx:1.26-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.access.log:/var/log/nginx.access.log
+      - ./nginx.error.log:/var/log/nginx.error.log
+    ports:
+      - 8000:80
+    depends_on:
+      - django

@@ -1,6 +1,6 @@
 # Twist Serve
 
-The front end of the companion for tennis players.
+The companion for tennis players.
 
 ![Home page](docs/static/images/home-page.png)
 
@@ -10,10 +10,26 @@ Twist Serve is a companion for tennis players. It allows you to check your curre
 
 # Technology Stack
 
-- TypeScript
-- React.js
-- Next.js
+## Front-end
+
 - Material UI
+- Next.js
+- React.js
+- TypeScript
+
+## Back-end
+
+- Celery
+- Django
+- Django REST Framework
+- GUnicorn
+
+# Standards being used
+
+- 12 Factors
+- JSend
+- PEP8
+- TypeScript Google Style Guide
 
 # License
 

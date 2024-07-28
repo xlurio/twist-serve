@@ -1,0 +1,38 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Back-End CI/CD
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.12"
+      - name: Install the dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install --upgrade mypy pylint ruff django-stubs[compatible-mypy] \
+            djangorestframework-stubs celery-types pylint-django
+      - name: Lint
+        run: |
+          mypy .
+          find . -type f -not -path "./venv/*" -name "*.py" | grep -v "migrations" \
+            | grep -v "gunicorn.conf.py" | xargs pylint
+          ruff check .
+          ruff format . --check
+      - name: Test
+        run: ./manage.py test
