@@ -6,8 +6,8 @@ pip install --upgrade mypy pylint ruff django-stubs[compatible-mypy] \
 set -e
 set -x
 
-mypy .
+python -m mypy .
 find . -type f -not -path "./venv/*" -name "*.py" | grep -v "migrations" \
-    | grep -v "gunicorn.conf.py" | xargs pylint
-ruff check .
-exec ruff format . --check
+    | grep -v "gunicorn.conf.py" | xargs python -m pylint
+python -m ruff check .
+python -m ruff format . --check
