@@ -14,27 +14,21 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      CACHE_URL: ${{ secrets.CACHE_URL }}
+      CELERY_BROKER_URL: ${{ secrets.CELERY_BROKER_URL }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      EMAIL_URL: ${{ secrets.EMAIL_URL }}
     defaults:
       run:
         working-directory: ./backend
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python 3.12
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.12"
-      - name: Install the dependencies
+      - name: Build docker compose
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install --upgrade mypy pylint ruff django-stubs[compatible-mypy] \
-            djangorestframework-stubs celery-types pylint-django
-      - name: Lint
+          docker compose build
+      - name: Run linter
         run: |
-          mypy .
-          find . -type f -not -path "./venv/*" -name "*.py" | grep -v "migrations" \
-            | grep -v "gunicorn.conf.py" | xargs pylint
-          ruff check .
-          ruff format . --check
-      - name: Test
-        run: ./manage.py test
+          docker compose run django sh -c "./scripts/lint.sh"
+      - name: Run linter
+        run: |
+          docker compose run django sh -c "python manage.py test"

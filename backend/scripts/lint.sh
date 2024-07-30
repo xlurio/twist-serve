@@ -1,6 +1,6 @@
 #! /bin/bash
-./venv/bin/python -m pip install --upgrade pip
-./venv/bin/pip install --upgrade mypy pylint ruff django-stubs[compatible-mypy] \
+python -m pip install --upgrade pip
+pip install --upgrade mypy pylint ruff django-stubs[compatible-mypy] \
     djangorestframework-stubs celery-types pylint-django
 
 set -e
