@@ -20,8 +20,9 @@ USER backend
 RUN touch /var/log/django.log
 RUN touch /var/log/gunicorn.access.log
 RUN touch /var/log/gunicorn.error.log
+RUN mkdir /app/.ruff_cache
 
-COPY --chown=backend:twistserve --chmod=777 . /app
+COPY --chown=backend:twistserve --chmod=755 . /app
 
 EXPOSE 8000
 
