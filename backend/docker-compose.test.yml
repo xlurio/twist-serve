@@ -33,12 +33,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      SECRET_KEY: "${SECRET_KEY}"
-      CACHE_URL: "${CACHE_URL}"
-      CELERY_BROKER_URL: "${CELERY_BROKER_URL}"
-      DATABASE_URL: "${DATABASE_URL}"
-      EMAIL_URL: "${EMAIL_URL}"
     depends_on:
       - redis
       - postgres
