@@ -34,11 +34,11 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      CACHE_URL: "${CACHE_URL}"
-      CELERY_BROKER_URL: "${CELERY_BROKER_URL}"
-      DATABASE_URL: "${DATABASE_URL}"
-      EMAIL_URL: "${EMAIL_URL}"
-      SECRET_KEY: "${SECRET_KEY}"
+      CACHE_URL: "$${CACHE_URL}"
+      CELERY_BROKER_URL: "$${CELERY_BROKER_URL}"
+      DATABASE_URL: "$${DATABASE_URL}"
+      EMAIL_URL: "$${EMAIL_URL}"
+      SECRET_KEY: "$${SECRET_KEY}"
     depends_on:
       - redis
       - postgres
