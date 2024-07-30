@@ -12,12 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      CACHE_URL: ${{ secrets.CACHE_URL }}
-      CELERY_BROKER_URL: ${{ secrets.CELERY_BROKER_URL }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      EMAIL_URL: ${{ secrets.EMAIL_URL }}
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+    environment: test
     defaults:
       run:
         working-directory: ./backend
@@ -29,9 +24,19 @@ jobs:
           docker compose -f docker-compose.test.yml pull
       - name: Run linter
         run: |
-          docker compose -f docker-compose.test.yml run django sh -c \
-            "./scripts/lint.sh"
+          docker compose -f docker-compose.test.yml run \
+            --env CACHE_URL=${{ secrets.CACHE_URL }} \
+            --env CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }} \
+            --env DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            --env EMAIL_URL=${{ secrets.EMAIL_URL }} \
+            --env SECRET_KEY=${{ secrets.SECRET_KEY }} \ 
+            django sh -c "python ./scripts/test_db_con.py && ./scripts/lint.sh"
       - name: Run linter
         run: |
-          docker compose -f docker-compose.test.yml run django sh -c \
-            "python manage.py test"
+          docker compose -f docker-compose.test.yml run \
+            --env CACHE_URL=${{ secrets.CACHE_URL }} \
+            --env CELERY_BROKER_URL=${{ secrets.CELERY_BROKER_URL }} \
+            --env DATABASE_URL=${{ secrets.DATABASE_URL }} \
+            --env EMAIL_URL=${{ secrets.EMAIL_URL }} \
+            --env SECRET_KEY=${{ secrets.SECRET_KEY }} \ 
+            django sh -c "python ./scripts/test_db_con.py && python manage.py test"
