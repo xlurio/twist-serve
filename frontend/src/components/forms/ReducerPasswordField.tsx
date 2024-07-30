@@ -1,12 +1,13 @@
 import {makeDispatchHTMLInputChange} from '@/lib/services';
+import {ReducerAction} from '@/types';
 import {TextField, TextFieldProps} from '@mui/material';
 import {Dispatch} from 'react';
 
-export default function ReducerPasswordField<T, K>(
+export default function ReducerPasswordField<T extends ReducerAction>(
   props: {
     dispatch: Dispatch<T>;
-    actionType: K;
-    actionAttrName?: string;
+    actionType: T['type'];
+    actionAttrName?: keyof T;
   } & Omit<TextFieldProps, 'variant'>
 ): JSX.Element {
   return (
@@ -19,7 +20,7 @@ export default function ReducerPasswordField<T, K>(
       onChange={makeDispatchHTMLInputChange(
         props.dispatch,
         props.actionType,
-        props.actionAttrName || 'newPassword'
+        props.actionAttrName || ('newPassword' as keyof T)
       )}
       required
       {...props}
