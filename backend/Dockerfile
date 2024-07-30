@@ -21,7 +21,7 @@ RUN touch /var/log/django.log
 RUN touch /var/log/gunicorn.access.log
 RUN touch /var/log/gunicorn.error.log
 
-COPY --chown=backend:twistserve . /app
+COPY --chown=backend:twistserve --chmod=755 . /app
 
 EXPOSE 8000
 
