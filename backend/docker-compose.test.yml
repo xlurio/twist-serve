@@ -22,8 +22,6 @@ services:
       context: .
       dockerfile: Dockerfile
     command: sh -c "celery --app django worker --pool solo"
-    volumes:
-      - .:/app
     depends_on:
       - rabbitmq
       - redis
@@ -37,11 +35,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - .:/app
-      - ./django.log:/var/log/django.log
-      - ./gunicorn.access.log:/var/log/gunicorn.access.log
-      - ./gunicorn.error.log:/var/log/gunicorn.error.log
     environment:
       SECRET_KEY: "${SECRET_KEY}"
       CACHE_URL: "${CACHE_URL}"
@@ -56,9 +49,7 @@ services:
   nginx:
     image: nginx:1.26-alpine
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx.access.log:/var/log/nginx.access.log
-      - ./nginx.error.log:/var/log/nginx.error.log
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - 8000:80
     depends_on:
