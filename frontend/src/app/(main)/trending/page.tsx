@@ -3,14 +3,6 @@ import TournamentListItem from '@/components/tournaments/TournamentListItem';
 
 const DUMMY_DATA = [
   {
-    id: 1,
-    name: 'United Cup',
-    location: 'Perth-Sydney, Australia',
-    period: '29 December, 2023 - 7 January, 2024',
-    tournamentAvatar:
-      'https://www.atptour.com/assets/atpwt/images/tournament/badges/categorystamps_unitedcup.png',
-  },
-  {
     id: 2,
     name: 'Brisbane International presented by Evie',
     location: 'Brisbane, Australia',
@@ -25,6 +17,14 @@ const DUMMY_DATA = [
     period: '1 - 7 January, 2024',
     tournamentAvatar:
       'https://www.atptour.com/assets/atpwt/images/tournament/badges/categorystamps_250.png',
+  },
+  {
+    id: 1,
+    name: 'United Cup',
+    location: 'Perth-Sydney, Australia',
+    period: '29 December, 2023 - 7 January, 2024',
+    tournamentAvatar:
+      'https://www.atptour.com/assets/atpwt/images/tournament/badges/categorystamps_unitedcup.png',
   },
 ];
 
