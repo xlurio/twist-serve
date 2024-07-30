@@ -13,11 +13,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
       CACHE_URL: ${{ secrets.CACHE_URL }}
       CELERY_BROKER_URL: ${{ secrets.CELERY_BROKER_URL }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       EMAIL_URL: ${{ secrets.EMAIL_URL }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
     defaults:
       run:
         working-directory: ./backend
@@ -26,6 +26,7 @@ jobs:
       - name: Build docker compose
         run: |
           docker compose -f docker-compose.test.yml build
+          docker compose -f docker-compose.test.yml pull
       - name: Run linter
         run: |
           docker compose -f docker-compose.test.yml run django sh -c \
