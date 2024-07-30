@@ -8,6 +8,8 @@ ENV PYTHONDONTWRITEBYTECODE=x
 COPY requirements.txt /app/requirements.txt
 RUN python -m pip install --upgrade pip
 RUN pip install -r requirements.txt
+RUN pip install --upgrade mypy pylint ruff django-stubs[compatible-mypy] \
+        djangorestframework-stubs celery-types pylint-django
 
 RUN addgroup --system --gid 1001 twistserve
 RUN adduser --system --uid 1001 --shell /bin/bash --ingroup twistserve backend
