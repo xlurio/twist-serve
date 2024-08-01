@@ -115,17 +115,18 @@ class PlayerWriteSerializer(serializers.ModelSerializer[Player]):
     class Meta:
         model = Player
         fields = (
-            "first_name",
-            "last_name",
+            "id",
             "email",
             "password",
             "avatar",
+            "first_name",
+            "last_name",
             "date_of_birth",
+            "weight",
+            "height",
             "hometown_country",
             "hometown_state_province",
             "hometown_city",
-            "weight",
-            "height",
             "best_hand",
             "backhand",
         )
@@ -137,7 +138,7 @@ class PlayerReadSerializer(serializers.ModelSerializer[Player]):
 
     class Meta:
         model = Player
-        read_only_fields = (
+        fields = (
             "first_name",
             "last_name",
             "avatar",
@@ -154,3 +155,4 @@ class PlayerReadSerializer(serializers.ModelSerializer[Player]):
             "losses",
             "num_of_titles",
         )
+        read_only_fields = fields

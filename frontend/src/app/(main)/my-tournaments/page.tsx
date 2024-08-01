@@ -1,50 +1,29 @@
-import {Container, List, Stack} from '@mui/material';
+'use client'
+import InfiniteScrollingList from '@/components/list/InfiniteScrollingList';
 import TournamentListItem from '@/components/tournaments/TournamentListItem';
-
-const DUMMY_DATA = [
-  {
-    id: 1,
-    name: 'United Cup',
-    location: 'Perth-Sydney, Australia',
-    period: '29 December, 2023 - 7 January, 2024',
-    tournamentAvatar:
-      'https://www.atptour.com/assets/atpwt/images/tournament/badges/categorystamps_unitedcup.png',
-  },
-  {
-    id: 2,
-    name: 'Brisbane International presented by Evie',
-    location: 'Brisbane, Australia',
-    period: '31 December, 2023 - 7 January, 2024',
-    tournamentAvatar:
-      'https://www.atptour.com/assets/atpwt/images/tournament/badges/categorystamps_250.png',
-  },
-  {
-    id: 3,
-    name: 'Bank of China Hong Kong Tennis Open',
-    location: 'Hong Kong, China',
-    period: '1 - 7 January, 2024',
-    tournamentAvatar:
-      'https://www.atptour.com/assets/atpwt/images/tournament/badges/categorystamps_250.png',
-  },
-];
+import {listTournamentsForAuthenticatedPlayer} from '@/lib/services/http/tournaments';
+import {ListTournamentsResponseDataResult} from '@/types/http';
+import {Stack} from '@mui/material';
 
 export default function MyTournaments(): JSX.Element {
   return (
-    <Container>
-      <Stack>
-        <h1>My Tournaments</h1>
-        <List>
-          {DUMMY_DATA.map(tournamentData => (
+    <Stack>
+      <h1>My Tournaments</h1>
+      <InfiniteScrollingList
+        mapCallback={(tournamentData: ListTournamentsResponseDataResult) => {
+          return (
             <TournamentListItem
               key={tournamentData.id}
               name={tournamentData.name}
-              location={tournamentData.location}
-              period={tournamentData.period}
-              tournamentAvatar={tournamentData.tournamentAvatar}
+              location={`${tournamentData.city}, ${tournamentData.country}`}
+              period={`${tournamentData.start_date} - ${tournamentData.end_date}`}
+              tournamentAvatar={tournamentData.avatar || undefined}
             />
-          ))}
-        </List>
-      </Stack>
-    </Container>
+          );
+        }}
+        getPageItems={listTournamentsForAuthenticatedPlayer}
+        itemVerboseName={'tournament'}
+      />
+    </Stack>
   );
 }

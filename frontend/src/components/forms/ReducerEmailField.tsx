@@ -1,14 +1,14 @@
 import {makeDispatchHTMLInputChange} from '@/lib/services';
-import {ReducerAction} from '@/types';
+import { ReducerAction } from '@/types/reducers';
 import {TextField} from '@mui/material';
 import {Dispatch} from 'react';
 
 export default function ReducerEmailField<T extends ReducerAction>({
   dispatch,
-  actionType,
+  actiontype,
 }: {
   dispatch: Dispatch<T>;
-  actionType: T['type'];
+  actiontype: T['type'];
 }) {
   return (
     <TextField
@@ -19,7 +19,7 @@ export default function ReducerEmailField<T extends ReducerAction>({
       type="email"
       onChange={makeDispatchHTMLInputChange(
         dispatch,
-        actionType,
+        actiontype,
         'newEmail' as keyof T
       )}
       required

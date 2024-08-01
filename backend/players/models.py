@@ -16,8 +16,9 @@ from players.choices import BackhandChoices, BestHandChoices
 if TYPE_CHECKING:
     from django.db.models.manager import RelatedManager
 
+    from accounts.models import User
+    from matches.managers.match import MatchManager
     from matches.models import Match
-    from matches.querysets import MatchQuerySet
     from tournaments.models import Tournament
 
 
@@ -32,7 +33,7 @@ class Player(BaseModel):
     matches_as_player2: RelatedManager[Match]
     titles: RelatedManager[Tournament]
 
-    user = models.OneToOneField(
+    user: models.OneToOneField[User, User] = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         related_name="player",
@@ -62,13 +63,13 @@ class Player(BaseModel):
     @property
     def wins(self) -> int:
         return cast(
-            "MatchQuerySet", self.MatchModel.objects.filter(is_active=True)
+            "MatchManager", self.MatchModel.objects.filter(is_active=True)
         ).get_number_of_wins_for_player(self)
 
     @property
     def losses(self) -> int:
         return cast(
-            "MatchQuerySet", self.MatchModel.objects.filter(is_active=True)
+            "MatchManager", self.MatchModel.objects.filter(is_active=True)
         ).get_number_of_losses_for_player(self)
 
     @property  # pylint: disable-next=invalid-name
@@ -85,6 +86,7 @@ class Player(BaseModel):
         return round(raw_age)
 
     def __str__(self) -> str:
+        # pylint: disable=no-member
         return (
             f'{self.user.full_name} ({self.age}")'
             if self.user

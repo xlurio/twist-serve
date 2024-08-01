@@ -1,8 +1,8 @@
-import {RegisterReducerAction, RegisterReducerActionTypes} from '@/types';
 import {Dispatch} from 'react';
-import 'dayjs/locale/en';
+
 import {makeDispatchHTMLInputChange} from '@/lib/services';
 import NumberField from '@/components/forms/NumberField';
+import { RegisterReducerAction, RegisterReducerActionTypes } from '@/types/reducers';
 
 export default function WeightField({
   dispatch,

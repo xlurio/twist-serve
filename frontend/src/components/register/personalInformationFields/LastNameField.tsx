@@ -1,5 +1,5 @@
 import {makeDispatchHTMLInputChange} from '@/lib/services';
-import {RegisterReducerAction, RegisterReducerActionTypes} from '@/types';
+import { RegisterReducerAction, RegisterReducerActionTypes } from '@/types/reducers';
 import { TextField } from '@mui/material';
 import {Dispatch} from 'react';
 

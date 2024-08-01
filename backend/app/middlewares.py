@@ -21,7 +21,7 @@ class JSendMiddleware:
         response = self.__get_response(request)
         is_not_info = response.status_code < 200 or response.status_code >= 300
 
-        if not isinstance(response, drf_res.Response) or is_not_info:
+        if (not isinstance(response, drf_res.Response)) or is_not_info:
             return response
 
         original_content = {

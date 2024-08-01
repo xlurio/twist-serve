@@ -1,10 +1,15 @@
-'use client'
-import { createPlayer } from '@/lib/adapters';
-import { dispatchErrorMessageForAxios, redirectAfterLogin } from '@/lib/services';
-import {ReducerAction, RegisterReducerAction, RegisterReducerActionTypes, RegisterReducerState} from '@/types';
+import {createPlayer} from '@/lib/adapters';
+import {dispatchErrorMessageForAxios} from '@/lib/services';
+import {redirectAfterLogin} from '@/lib/services/http';
+import {
+  ReducerAction,
+  RegisterReducerAction,
+  RegisterReducerActionTypes,
+  RegisterReducerState,
+} from '@/types/reducers';
 import dayjs from 'dayjs';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import {Dispatch, FormEvent, useCallback} from 'react';
+import {Dispatch, FormEvent} from 'react';
 
 function _makeRegisterPayloadFromState(state: RegisterReducerState) {
   return {
@@ -35,22 +40,31 @@ async function _tryToRegister({
 }) {
   try {
     await createPlayer(_makeRegisterPayloadFromState(state));
-
-    try {
-      await redirectAfterLogin({
-        email: state.email,
-        password: state.password,
-        router,
-      });
-    } catch (_error) {
-      router.push('/login/');
-    }
+    await _redirectToLoginIfNotAbleToGetAccessToken({state, router});
   } catch (error) {
     dispatchErrorMessageForAxios({
       error: error as Error,
       dispatch: dispatch as Dispatch<{newErrorMessage: string} & ReducerAction>,
       actionType: RegisterReducerActionTypes.SET_ERROR_MESSAGE,
     });
+  }
+}
+
+async function _redirectToLoginIfNotAbleToGetAccessToken({
+  state,
+  router,
+}: {
+  state: RegisterReducerState;
+  router: AppRouterInstance;
+}) {
+  try {
+    await redirectAfterLogin({
+      email: state.email,
+      password: state.password,
+      router,
+    });
+  } catch (_error) {
+    router.push('/login/');
   }
 }
 
@@ -104,7 +118,7 @@ async function _processRegisterForm({
   });
 }
 
-function _useFormSubmitHandlerCallback({
+function _makeFormSubmitHandlerCallback({
   state,
   dispatch,
   router,
@@ -113,18 +127,15 @@ function _useFormSubmitHandlerCallback({
   dispatch: Dispatch<RegisterReducerAction>;
   router: AppRouterInstance;
 }) {
-  return useCallback(
-    async (event: FormEvent<HTMLFormElement>) => {
-      event.preventDefault();
-      return _processRegisterForm({
-        state,
-        dispatch,
-        router,
-        event,
-      });
-    },
-    [state, dispatch, router]
-  );
+  return async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    return _processRegisterForm({
+      state,
+      dispatch,
+      router,
+      event,
+    });
+  };
 }
 
 export default function RegisterFormContainer({
@@ -140,7 +151,7 @@ export default function RegisterFormContainer({
 }): JSX.Element {
   return (
     <form
-      onSubmit={_useFormSubmitHandlerCallback({state, dispatch, router})}
+      onSubmit={_makeFormSubmitHandlerCallback({state, dispatch, router})}
       method="post"
     >
       {children}

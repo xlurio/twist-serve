@@ -4,7 +4,7 @@ from pathlib import Path
 
 import environ
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
@@ -16,7 +16,7 @@ SECRET_KEY = env("SECRET_KEY", str)
 DEBUG = env("DEBUG", bool, False)
 
 USE_X_FORWARDED_HOST = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "core",
     "matches",
     "players",
+    "subscriptions",
     "tournaments",
 ]
 

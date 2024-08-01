@@ -1,4 +1,3 @@
-import {RegisterReducerAction, RegisterReducerActionTypes} from '@/types';
 import {
   FormControl,
   InputLabel,
@@ -7,8 +6,9 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 import {Dispatch, ReactNode} from 'react';
-import 'dayjs/locale/en';
+
 import {makeDispatchHTMLInputChange} from '@/lib/services';
+import { RegisterReducerAction, RegisterReducerActionTypes } from '@/types/reducers';
 
 export default function BackhandField({
   dispatch,

@@ -1,11 +1,16 @@
 from __future__ import annotations
 
 import random
+from typing import TYPE_CHECKING
 
 import factory
+import faker
 from factory import django
 
 from matches.choices import PointChoices
+
+if TYPE_CHECKING:
+    from matches.models import Match
 
 
 def _generate_player2_points(self: MatchGameFactory) -> PointChoices:
@@ -29,9 +34,15 @@ class MatchGameFactory(django.DjangoModelFactory):
         model = "matches.MatchGame"
 
     position = factory.Faker("pyint", min_value=1)
-    player1_points = factory.Faker("enum", enum_cls=PointChoices)
+    player1_points = factory.LazyFunction(
+        lambda: random.choice(list(PointChoices) + ([PointChoices.GAME] * 3))
+    )
     player2_points = factory.LazyAttribute(_generate_player2_points)
     game_set = factory.SubFactory("matches.tests.factories.MatchSetFactory")
+
+
+def _create_match_for_match_set() -> Match:
+    return MatchFactory.create(date=faker.Faker().date())
 
 
 class MatchSetFactory(django.DjangoModelFactory):
@@ -39,7 +50,7 @@ class MatchSetFactory(django.DjangoModelFactory):
         model = "matches.MatchSet"
 
     position = factory.Faker("pyint", min_value=1, max_value=5)
-    match = factory.SubFactory("matches.tests.factories.MatchFactory")
+    match = factory.LazyFunction(_create_match_for_match_set)
 
 
 class MatchFactory(django.DjangoModelFactory):

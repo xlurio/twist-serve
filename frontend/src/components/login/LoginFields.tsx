@@ -1,22 +1,17 @@
 import {FormControl, Stack} from '@mui/material';
-import {LoginReducerAction, LoginReducerActionTypes} from '@/types';
 import ReducerPasswordField from '@/components/forms/ReducerPasswordField';
 import ReducerEmailField from '@/components/forms/ReducerEmailField';
 import Checkbox from '@/components/forms/Checkbox';
-import {ChangeEvent, Dispatch, useCallback} from 'react';
+import {ChangeEvent, Dispatch} from 'react';
+import {LoginReducerAction, LoginReducerActionTypes} from '@/types/reducers';
 
-function _useHandleRememberMeChangeCallback(
-  dispatch: Dispatch<LoginReducerAction>
-) {
-  return useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      dispatch({
-        type: LoginReducerActionTypes.SET_REMEMBER_ME,
-        newRememberMe: event.target.checked,
-      });
-    },
-    [dispatch]
-  );
+function _makeHandleRememberMeChangeCallback(dispatch: Dispatch<LoginReducerAction>) {
+  return (event: ChangeEvent<HTMLInputElement>) => {
+    dispatch({
+      type: LoginReducerActionTypes.SET_REMEMBER_ME,
+      newRememberMe: event.target.checked,
+    });
+  };
 }
 
 export default function LoginFields({
@@ -29,14 +24,14 @@ export default function LoginFields({
       <Stack gap={1}>
         <ReducerEmailField
           dispatch={dispatch}
-          actionType={LoginReducerActionTypes.SET_EMAIL}
+          actiontype={LoginReducerActionTypes.SET_EMAIL}
         />
         <ReducerPasswordField
           dispatch={dispatch}
-          actionType={LoginReducerActionTypes.SET_PASSWORD}
+          actiontype={LoginReducerActionTypes.SET_PASSWORD}
         />
         <Checkbox
-          onChange={_useHandleRememberMeChangeCallback(dispatch)}
+          onChange={_makeHandleRememberMeChangeCallback(dispatch)}
           label="Remember me"
         />
       </Stack>

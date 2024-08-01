@@ -1,7 +1,5 @@
 'use client';
-import {Button, Container, Stack, Typography} from '@mui/material';
-import theme from '@/theme';
-import 'dayjs/locale/en';
+import {Button, Stack, Typography, useTheme} from '@mui/material';
 import CredentialFields from '@/components/register/CredentialFields';
 import PersonalInformationFields from '@/components/register/PersonalInformationFields';
 import PlaystyleFields from '@/components/register/PlaystyleFields';
@@ -11,17 +9,17 @@ import {useRegisterState} from '@/lib/hooks/registerForm';
 
 export default function Register() {
   const {state, dispatch, router, errorMessage} = useRegisterState();
+  const theme = useTheme();
 
   return (
-    <Container>
-      <Stack gap={1}>
+      <Stack>
         <h1>Register</h1>
         <RegisterFormContainer
           state={state}
           dispatch={dispatch}
           router={router}
         >
-          <Stack gap={1}>
+          <Stack>
             <CredentialFields dispatch={dispatch} />
             <PersonalInformationFields dispatch={dispatch} />
             <PlaystyleFields dispatch={dispatch} />
@@ -35,6 +33,5 @@ export default function Register() {
           </Button>
         </RegisterFormContainer>
       </Stack>
-    </Container>
   );
 }

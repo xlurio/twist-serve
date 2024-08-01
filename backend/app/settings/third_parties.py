@@ -5,7 +5,7 @@ from pathlib import Path
 
 import environ
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
@@ -22,8 +22,10 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_PAGINATION_CLASS": "app.pagination.CustomPageNumberPagination",
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.NamespaceVersioning",
     "EXCEPTION_HANDLER": "app.exception_handlers.exception_handler",
+    "PAGE_SIZE": 10,
 }
 
 # Celery

@@ -1,9 +1,9 @@
-import {RegisterReducerState} from '@/types';
 import {useRouter} from 'next/navigation';
 import {useReducer} from 'react';
-import 'dayjs/locale/en';
+
 import {useCheckIfIsAuthenticatedEffect} from '../hooks';
-import {registerStateReducer} from '../reducers';
+import { RegisterReducerState } from '@/types/reducers';
+import { registerStateReducer } from '../reducers/registerForm';
 
 function _makeRegisterInitialState(): RegisterReducerState {
   return {

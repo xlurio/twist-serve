@@ -1,23 +1,23 @@
 'use client';
-import {Button, Container, Link, Stack, Typography} from '@mui/material';
+import {
+  Button,
+  Link,
+  Stack,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import {Dispatch, FormEvent, useCallback, useReducer} from 'react';
 import {useRouter} from 'next/navigation';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import {
-  LoginReducerAction,
-  LoginReducerActionTypes,
-  LoginReducerState,
-  ReducerAction,
-} from '@/types';
-import theme from '@/theme';
-import {
   dispatchErrorMessageForAxios,
   executeReducerAction,
-  redirectAfterLogin,
 } from '@/lib/services';
+import { redirectAfterLogin } from '@/lib/services/http';
 import LoginFields from '@/components/login/LoginFields';
 import {ActionTypeUnrecognized} from '@/lib/errors';
 import {useCheckIfIsAuthenticatedEffect} from '@/lib/hooks';
+import { LoginReducerAction, LoginReducerActionTypes, LoginReducerState, ReducerAction } from '@/types/reducers';
 
 async function _tryToLogin({
   state,
@@ -144,22 +144,21 @@ function _useLoginState() {
 
 export default function Login() {
   const {state, dispatch, handleFormSubmit} = _useLoginState();
+  const theme = useTheme();
 
   return (
-    <Container>
-      <form method="post" onSubmit={handleFormSubmit}>
-        <Stack gap={1}>
-          <h2>Login</h2>
-          <LoginFields dispatch={dispatch} />
-          <Typography sx={{color: theme.palette.error.main}}>
-            {state.errorMessage}
-          </Typography>
-          <Button sx={{margin: '1em 0'}} type="submit" variant="contained">
-            Login
-          </Button>
-          <Link href="/register/">I don&apos;t have an account</Link>
-        </Stack>
-      </form>
-    </Container>
+    <form method="post" onSubmit={handleFormSubmit}>
+      <Stack gap={1}>
+        <h2>Login</h2>
+        <LoginFields dispatch={dispatch} />
+        <Typography sx={{color: theme.palette.error.main}}>
+          {state.errorMessage}
+        </Typography>
+        <Button sx={{margin: '1em 0'}} type="submit" variant="contained">
+          Login
+        </Button>
+        <Link href="/register/">I don&apos;t have an account</Link>
+      </Stack>
+    </form>
   );
 }

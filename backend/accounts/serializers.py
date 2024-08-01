@@ -44,10 +44,12 @@ class UserReadSerializer(serializers.ModelSerializer["User"]):
 
     class Meta:
         model = get_user_model()
-        read_only_fields = (
+        fields = (
+            "id",
             "first_name",
             "last_name",
             "email",
             "player",
             "player_avatar",
         )
+        read_only_fields = fields

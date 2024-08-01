@@ -5,7 +5,7 @@ plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
 disable_error_code = ["return", "no-any-return", "misc"]
 
 [[tool.mypy.overrides]]
-module = "factory.*"
+module = ["factory.*", "django_filters.*"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
@@ -17,6 +17,7 @@ django_settings_module = "app.settings"
 
 [tool.ruff]
 target-version = "py312"
+exclude = ["__init__.py"]
 
 [tool.ruff.lint]
 select = [

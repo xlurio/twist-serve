@@ -1,7 +1,6 @@
 import {
   ListItem,
   ListItemButton,
-  ListItemText,
   Stack,
   Typography,
 } from '@mui/material';
@@ -23,15 +22,11 @@ export default function MatchListItem({
   return (
     <ListItem disablePadding>
       <ListItemButton>
-        <ListItemText
-          primary={
-            <Stack>
-              <Typography variant="caption">{date}</Typography>
-              <MatchListItemPlayerScore player={player1} score={player1Score} />
-              <MatchListItemPlayerScore player={player2} score={player2Score} />
-            </Stack>
-          }
-        ></ListItemText>
+        <Stack sx={{width: '100%'}}>
+          <Typography variant="caption">{date}</Typography>
+          <MatchListItemPlayerScore player={player1} score={player1Score} />
+          <MatchListItemPlayerScore player={player2} score={player2Score} />
+        </Stack>
       </ListItemButton>
     </ListItem>
   );

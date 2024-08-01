@@ -1,7 +1,10 @@
-import sys
-
 from django.db import models
+from django.db.backends.base import operations
 from django.utils.translation import gettext_lazy as _
+
+MAX_SMALL_INTEGER = operations.BaseDatabaseOperations.integer_field_ranges[
+    "SmallIntegerField"
+][1]
 
 
 class PointChoices(models.IntegerChoices):
@@ -9,7 +12,7 @@ class PointChoices(models.IntegerChoices):
     FIFTEEN = 15, _("15")
     THIRTY = 30, _("30")
     FORTY = 40, _("40")
-    GAME = sys.maxsize, _("game")
+    GAME = MAX_SMALL_INTEGER, _("game")
 
 
 class WinnerChoices(models.TextChoices):

@@ -13,7 +13,7 @@ export default function MatchListItemPlayerScore({
       <Grid item xs={10}>
         <Typography variant="h6">{player}</Typography>
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={2} sx={{display: 'flex', alignItems: 'center'}}>
         <Typography>{score}</Typography>
       </Grid>
     </Grid>

@@ -1,19 +1,29 @@
 {
   "extends": [
+    "plugin:react/recommended",
     "next/core-web-vitals",
     "google",
     "prettier",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "eslint-config-next"
   ],
   "rules": {
-    "max-lines-per-function": ["error", 30],
-    "max-lines": ["error", 200],
-    "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": [
       "error",
       {"argsIgnorePattern": "^_", "varsIgnorePattern": "^_"}
     ],
-    "valid-jsdoc": "off",
-    "require-jsdoc": "off"
+    "max-depth": [
+      "error",
+      {
+        "max": 1
+      }
+    ],
+    "max-lines": ["error", 200],
+    "max-lines-per-function": ["error", 30],
+    "max-nested-callbacks": ["error", 1],
+    "max-statements": ["error", 10],
+    "no-unused-vars": "off",
+    "require-jsdoc": "off",
+    "valid-jsdoc": "off"
   }
 }

@@ -1,15 +1,18 @@
 from __future__ import annotations
 
+import itertools
 from typing import TYPE_CHECKING, Any, cast
 
 import faker
 from django.core.management.base import BaseCommand, CommandParser
 from django.db import transaction
+from django.utils import timezone
 
 from matches.choices import WinnerChoices
 from matches.tests.factories import MatchFactory, MatchGameFactory, MatchSetFactory
 from players.models import Player
 from players.tests.factories import PlayerFactory
+from subscriptions.tests.factories import SubscriptionFactory
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -78,7 +81,7 @@ class GameScore:
 
 
 class Command(BaseCommand):
-    help = "Closes the specified poll for voting"
+    help = "Populates the matches for the specified player"
 
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument("player_id", type=int)
@@ -90,14 +93,20 @@ class Command(BaseCommand):
         num = options["num"]
 
         for match_idx in range(num):
-            other_player = PlayerFactory.create()
-            match = MatchFactory.create(**self.__sort_players(player, other_player))
-            self.__enrich_match(match)
-            self.stdout.write(
-                f"Created {match_idx + 1} matches for player '{player.pk}'"
-            )
+            self.__create_match(match_idx, player)
 
-        self.stdout.write(self.style.SUCCESS(f"{num} matched successfully created"))
+        self.stdout.write(self.style.SUCCESS(f"{num} matches successfully created"))
+
+    def __create_match(self, match_idx: int, player: Player) -> None:
+        other_player = PlayerFactory.create()
+        match: Match = MatchFactory.create(**self.__sort_players(player, other_player))
+        did_match_happened = match.date <= timezone.localdate()
+        SubscriptionFactory.create(player=player, tournament=match.tournament)
+
+        if did_match_happened:
+            self.__enrich_match(match)
+
+        self.stdout.write(f"Created {match_idx + 1} matches for player '{player.pk}'")
 
     def __sort_players(
         self, player: Player, other_player: Player
@@ -111,18 +120,30 @@ class Command(BaseCommand):
 
     def __enrich_match(self, match: Match) -> None:
         score = SetScore()
+        set_position_counter = itertools.count(1)
 
         while score.is_set_going:
-            new_set = cast("MatchSet", MatchSetFactory.create(match=match))
+            new_set = cast(
+                "MatchSet",
+                MatchSetFactory.create(
+                    position=next(set_position_counter), match=match
+                ),
+            )
             new_set = self.__enrich_set(new_set)
             score.compute_new_set(new_set)
             self.stdout.write(str(score))
 
     def __enrich_set(self, match_set: MatchSet) -> MatchSet:
         score = GameScore()
+        game_position_counter = itertools.count(1)
 
         while score.is_game_going:
-            new_game = cast("MatchGame", MatchGameFactory.create(game_set=match_set))
+            new_game = cast(
+                "MatchGame",
+                MatchGameFactory.create(
+                    position=next(game_position_counter), game_set=match_set
+                ),
+            )
             score.compute_new_game(new_game)
             self.stdout.write(str(score))
 

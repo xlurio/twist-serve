@@ -1,8 +1,4 @@
-import {
-  NavigationBarReducerAction,
-  NavigationBarReducerActionType,
-  NavigationBarReducerState,
-} from '@/types';
+'use client';
 import {
   Dispatch,
   SetStateAction,
@@ -11,8 +7,13 @@ import {
   useCallback,
   MouseEventHandler,
 } from 'react';
-import 'dayjs/locale/en';
+
 import Cookies from 'js-cookie';
+import {
+  NavigationBarReducerAction,
+  NavigationBarReducerActionType,
+  NavigationBarReducerState,
+} from '@/types/reducers';
 
 function _profileMenuReducer(
   prevState: NavigationBarReducerState,

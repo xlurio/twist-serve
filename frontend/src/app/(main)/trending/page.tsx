@@ -1,50 +1,83 @@
-import {Container, List, Stack} from '@mui/material';
+'use client';
+import {List, Stack} from '@mui/material';
 import TournamentListItem from '@/components/tournaments/TournamentListItem';
+import dayjs from 'dayjs';
+import {useAppDispatch} from '@/lib/hooks';
+import {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from 'react';
+import {ListTournamentsResponseDataResult} from '@/types/http';
+import {triggerSnackBarOnRequestError} from '@/lib/services/http';
+import {CustomThunkDispatch} from '@/types';
+import {listTournaments} from '@/lib/services/http/tournaments';
 
-const DUMMY_DATA = [
-  {
-    id: 2,
-    name: 'Brisbane International presented by Evie',
-    location: 'Brisbane, Australia',
-    period: '31 December, 2023 - 7 January, 2024',
-    tournamentAvatar:
-      'https://www.atptour.com/assets/atpwt/images/tournament/badges/categorystamps_250.png',
-  },
-  {
-    id: 3,
-    name: 'Bank of China Hong Kong Tennis Open',
-    location: 'Hong Kong, China',
-    period: '1 - 7 January, 2024',
-    tournamentAvatar:
-      'https://www.atptour.com/assets/atpwt/images/tournament/badges/categorystamps_250.png',
-  },
-  {
-    id: 1,
-    name: 'United Cup',
-    location: 'Perth-Sydney, Australia',
-    period: '29 December, 2023 - 7 January, 2024',
-    tournamentAvatar:
-      'https://www.atptour.com/assets/atpwt/images/tournament/badges/categorystamps_unitedcup.png',
-  },
-];
+function _useFetchTournamentsCallback(
+  setTournaments: Dispatch<SetStateAction<ListTournamentsResponseDataResult[]>>
+) {
+  return async () => {
+    const tournamentsData = await listTournaments({
+      ordering: '-num_of_subscriptions',
+      page_size: 5,
+      start_date__gte: dayjs(Date()).format('YYYY-MM-DD'),
+    });
+    setTournaments(tournamentsData.results);
+  };
+}
+
+function _useFetchTournamentsOrSnackBarCallback({
+  setTournaments,
+  dispatch,
+}: {
+  setTournaments: Dispatch<SetStateAction<ListTournamentsResponseDataResult[]>>;
+  dispatch: CustomThunkDispatch;
+}) {
+  return () => {
+    triggerSnackBarOnRequestError(
+      _useFetchTournamentsCallback(setTournaments),
+      dispatch
+    );
+  };
+}
+
+function useTrendingState() {
+  const dispatch = useAppDispatch();
+  const [tournaments, setTournaments] = useState<
+    ListTournamentsResponseDataResult[]
+  >([]);
+
+  useEffect(() => {
+    const timeout = setTimeout(
+      _useFetchTournamentsOrSnackBarCallback({setTournaments, dispatch}),
+      200
+    );
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return tournaments;
+}
 
 export default function Trending(): JSX.Element {
+  const tournaments = useTrendingState();
+  const tournamentsWereFound = tournaments.length > 0;
+
   return (
-    <Container>
-      <Stack>
-        <h1>Trending Tournaments</h1>
-        <List>
-          {DUMMY_DATA.map(tournamentData => (
-            <TournamentListItem
-              key={tournamentData.id}
-              name={tournamentData.name}
-              location={tournamentData.location}
-              period={tournamentData.period}
-              tournamentAvatar={tournamentData.tournamentAvatar}
-            />
-          ))}
-        </List>
-      </Stack>
-    </Container>
+    <Stack>
+      <h1>Trending Tournaments</h1>
+      {tournamentsWereFound ? '' : <h2>No tournament was found</h2>}
+      <List>
+        {tournaments.map(tournamentData => (
+          <TournamentListItem
+            key={tournamentData.id}
+            name={tournamentData.name}
+            location={`${tournamentData.city}, ${tournamentData.country}`}
+            period={`${tournamentData.start_date} - ${tournamentData.end_date}`}
+            tournamentAvatar={tournamentData.avatar || undefined}
+          />
+        ))}
+      </List>
+    </Stack>
   );
 }

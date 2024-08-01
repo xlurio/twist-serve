@@ -78,4 +78,4 @@ class ExceptionHandler:
 
 def exception_handler(exc: Exception, context: Any) -> response.Response | None:
     del context
-    ExceptionHandler().handle(exc)
+    return ExceptionHandler().handle(exc)

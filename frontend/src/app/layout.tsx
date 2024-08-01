@@ -4,6 +4,7 @@ import {ThemeProvider} from '@mui/material/styles';
 import theme from '../theme';
 import CssBaseline from '@mui/material/CssBaseline';
 import {Zoom} from '@mui/material';
+import StoreProvider from './StoreProvider';
 
 export const metadata: Metadata = {
   title: 'Tennis Tournaments',
@@ -23,15 +24,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline>
+        <StoreProvider>
+          <AppRouterCacheProvider options={{enableCssLayer: true}}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
               <Zoom in>
                 <main>{children}</main>
               </Zoom>
-            </CssBaseline>
-          </ThemeProvider>
-        </AppRouterCacheProvider>
+            </ThemeProvider>
+          </AppRouterCacheProvider>
+        </StoreProvider>
       </body>
     </html>
   );

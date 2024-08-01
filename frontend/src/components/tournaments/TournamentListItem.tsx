@@ -1,24 +1,21 @@
-'use client'
+'use client';
 import {
   ListItem,
-  ListItemText,
   ListItemAvatar,
   Avatar,
   ListItemButton,
+  useTheme,
 } from '@mui/material';
-import theme from '@/theme';
+import TournamentListItemBody from './tournamentListItem/TournamentListItemBody';
 
-export default function TournamentListItem({
-  name,
-  location,
-  period,
-  tournamentAvatar,
-}: {
-  name: string;
+export default function TournamentListItem(props: {
   location: string;
+  name: string;
   period: string;
-  tournamentAvatar: string;
+  tournamentAvatar?: string;
 }): JSX.Element {
+  const theme = useTheme();
+
   return (
     <ListItem disablePadding>
       <ListItemButton>
@@ -26,10 +23,14 @@ export default function TournamentListItem({
           <Avatar
             sx={{backgroundColor: theme.palette.common.white}}
             alt="tournament-badge"
-            src={tournamentAvatar}
+            src={props.tournamentAvatar}
           ></Avatar>
         </ListItemAvatar>
-        <ListItemText primary={name} secondary={`${location} | ${period}`} />
+        <TournamentListItemBody
+          location={props.location}
+          name={props.name}
+          period={props.period}
+        />
       </ListItemButton>
     </ListItem>
   );

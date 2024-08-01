@@ -42,12 +42,6 @@ services:
       - ./django.log:/var/log/django.log
       - ./gunicorn.access.log:/var/log/gunicorn.access.log
       - ./gunicorn.error.log:/var/log/gunicorn.error.log
-    environment:
-      SECRET_KEY: "${SECRET_KEY}"
-      CACHE_URL: "${CACHE_URL}"
-      CELERY_BROKER_URL: "${CELERY_BROKER_URL}"
-      DATABASE_URL: "${DATABASE_URL}"
-      EMAIL_URL: "${EMAIL_URL}"
     depends_on:
       - redis
       - postgres
