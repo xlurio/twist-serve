@@ -14,6 +14,17 @@ export async function redirectAfterLogin({
   rememberMe?: boolean;
   router: AppRouterInstance;
 } & GetTokenRequest) {
+  await login({email, password, rememberMe});
+  router.push('/');
+}
+
+export async function login({
+  email,
+  password,
+  rememberMe,
+}: {
+  rememberMe?: boolean;
+} & GetTokenRequest) {
   const response = await getToken({email, password});
   if (rememberMe) {
     document.cookie =
@@ -25,7 +36,6 @@ export async function redirectAfterLogin({
   }
 
   document.cookie = `token=${response.data.data.access}`;
-  router.push('/');
 }
 
 export async function triggerSnackBarOnRequestError<T>(
@@ -66,7 +76,7 @@ function _triggerSnackBarForAxiosError({
     : false;
 
   if (isClientError) {
-    const errorMessage = error.response ? error.response.data.message : error;
+    const errorMessage = error.response?.data.message || error;
     dispatch(setMessage(`Something went wrong: ${errorMessage}`));
   }
 

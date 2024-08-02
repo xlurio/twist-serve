@@ -1,4 +1,5 @@
-import InfiniteScrollingLoading from '@/components/list/InfiniteScrollingLoading';
+'use client';
+import InfiniteScrollingLoading from './infiniteScrollingList/InfiniteScrollingLoading';
 import {useInfiniteScrollingState} from '@/lib/hooks/infiniteScrolling';
 import {
   BackendPaginatedResponseData,
@@ -7,30 +8,34 @@ import {
 } from '@/types/http';
 import {List} from '@mui/material';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import InfiniteScrollingNotFound from './infiniteScrollingList/InfiniteScrollingNotFound';
+
+type GetPageItems<T> = (
+  payload: ListRequestQueryParameters,
+  router: AppRouterInstance
+) => Promise<T | null>;
 
 export default function InfiniteScrollingList<
   T extends BackendPaginatedResponseDataResult,
   K extends BackendPaginatedResponseData,
->({
-  mapCallback,
-  getPageItems,
-  itemVerboseName,
-}: {
+>(props: {
   mapCallback: (value: T) => JSX.Element;
-  getPageItems: (
-    payload: ListRequestQueryParameters,
-    router: AppRouterInstance
-  ) => Promise<K | null>;
+  getPageItems: GetPageItems<K>;
   itemVerboseName: string;
 }) {
-  const [infiniteScrollState, loadingRef] =
-    useInfiniteScrollingState(getPageItems);
-  const itemsWereFound = infiniteScrollState.items.length > 0;
+  const [infiniteScrollState, loadingRef] = useInfiniteScrollingState(
+    props.getPageItems
+  );
+  const noItemsWereFound = infiniteScrollState.items.length <= 0;
 
   return (
     <List>
-      {itemsWereFound ? '' : <h2>No {itemVerboseName} was found</h2>}
-      {(infiniteScrollState.items as T[]).map(mapCallback)}
+      <InfiniteScrollingNotFound
+        hasNoMore={!infiniteScrollState.hasMore}
+        noItemsWereFound={noItemsWereFound}
+        itemVerboseName={props.itemVerboseName}
+      />
+      {(infiniteScrollState.items as T[]).map(props.mapCallback)}
       <InfiniteScrollingLoading
         hasMore={infiniteScrollState.hasMore}
         ref={loadingRef}

@@ -1,9 +1,4 @@
-import {
-  ListItem,
-  ListItemButton,
-  Stack,
-  Typography,
-} from '@mui/material';
+import {ListItem, ListItemButton, Slide, Stack, Typography} from '@mui/material';
 import MatchListItemPlayerScore from './matchListItem/MatchListItemPlayerScore';
 
 export default function MatchListItem({
@@ -20,14 +15,16 @@ export default function MatchListItem({
   date: string;
 }): JSX.Element {
   return (
-    <ListItem disablePadding>
-      <ListItemButton>
-        <Stack sx={{width: '100%'}}>
-          <Typography variant="caption">{date}</Typography>
-          <MatchListItemPlayerScore player={player1} score={player1Score} />
-          <MatchListItemPlayerScore player={player2} score={player2Score} />
-        </Stack>
-      </ListItemButton>
-    </ListItem>
+    <Slide direction="up" in>
+      <ListItem disablePadding>
+        <ListItemButton>
+          <Stack sx={{width: '100%'}}>
+            <Typography variant="caption">{date}</Typography>
+            <MatchListItemPlayerScore player={player1} score={player1Score} />
+            <MatchListItemPlayerScore player={player2} score={player2Score} />
+          </Stack>
+        </ListItemButton>
+      </ListItem>
+    </Slide>
   );
 }

@@ -1,14 +1,10 @@
-'use client';
 import {AppBar, Link, Toolbar, Typography} from '@mui/material';
 import NavigationBarDrawer from './navigationBar/NavigationBarDrawer';
-import IconButtonLink from '../IconButtonLink';
-import SearchIcon from '@mui/icons-material/Search';
 import UserToolbarSection from './navigationBar/UserToolbarSection';
-import {useCheckIfIsAuthenticatedEffect} from '@/lib/hooks';
+import {cookies} from 'next/headers';
 
 export default function NavigationBar(): JSX.Element {
-  const [isAuthenticated, setIsAuthenticated] =
-    useCheckIfIsAuthenticatedEffect();
+  const isAuthenticated = Boolean(cookies().get('token'));
 
   return (
     <AppBar position="sticky">
@@ -19,15 +15,7 @@ export default function NavigationBar(): JSX.Element {
             Royal
           </Link>
         </Typography>
-        <IconButtonLink
-          href="/search/"
-          ariaLabel="search"
-          icon={<SearchIcon />}
-        />
-        <UserToolbarSection
-          isAuthenticated={isAuthenticated}
-          setIsAuthenticated={setIsAuthenticated}
-        />
+        <UserToolbarSection isAuthenticated={isAuthenticated} />
       </Toolbar>
     </AppBar>
   );

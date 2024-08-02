@@ -30,7 +30,7 @@ async function _listTournamentsForAuthenticatedPlayer(
   router: AppRouterInstance
 ): Promise<ListTournamentsResponseData | null> {
   const user = await myAccountData(router);
-  const playerId = user ? user.player : null;
+  const playerId = user?.player || null;
 
   if (playerId) {
     return await cachedListTournaments({

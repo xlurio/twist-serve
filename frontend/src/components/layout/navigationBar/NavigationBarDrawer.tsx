@@ -1,3 +1,4 @@
+'use client';
 import {Box, Drawer, IconButton} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import {useCallback, useState, MouseEvent} from 'react';

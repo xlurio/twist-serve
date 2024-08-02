@@ -45,7 +45,7 @@ class Player(BaseModel):
     )
     date_of_birth = models.DateField(_("date of birth"))
     hometown_country = models.TextField(_("hometown country"))
-    hometown_state_province = models.TextField(_("hometown state/province"))
+    hometown_state_province = models.TextField(_("hometown state/province"), blank=True)
     hometown_city = models.TextField(_("hometown city"))
     weight = models.IntegerField(
         _("weight (kg)"), help_text=_("player's weight in kilograms")

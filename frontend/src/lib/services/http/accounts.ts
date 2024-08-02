@@ -13,7 +13,7 @@ export const myAccountData = cache(
       backendRequestCallback: getAuthenticatedUser,
       router,
     });
-    return response ? response.data.data : null;
+    return response?.data.data || null;
   }
 );
 
@@ -120,9 +120,7 @@ function _redirectUnauthenticatedToLoginOrThrow({
 }
 
 function _throwIfNotUnauthenticated(error: AxiosError) {
-  const isNotUnauthenticated = error.response
-    ? error.response.status !== 401
-    : false;
+  const isNotUnauthenticated = error.response?.status !== 401;
 
   if (isNotUnauthenticated) {
     throw error;

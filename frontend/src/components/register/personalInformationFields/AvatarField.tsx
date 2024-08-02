@@ -1,6 +1,5 @@
 import {Button, Grid, styled} from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { ChangeEventHandler } from 'react';
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -14,11 +13,7 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-export default function AvatarField({
-  onChange,
-}: {
-  onChange?: ChangeEventHandler<HTMLInputElement>;
-}): JSX.Element {
+export default function AvatarField(): JSX.Element {
   return (
     <Grid container>
       <Grid item xs={6}>
@@ -33,7 +28,7 @@ export default function AvatarField({
           startIcon={<CloudUploadIcon />}
         >
           Upload file
-          <VisuallyHiddenInput id="avatar" onChange={onChange} type="file" />
+          <VisuallyHiddenInput id="avatar" name="avatar" type="file" />
         </Button>
       </Grid>
     </Grid>

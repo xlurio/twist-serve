@@ -1,21 +1,29 @@
-import {Stack} from '@mui/material';
-import {Dispatch} from 'react';
-import HometownCountry from './hometownFields/HometownCountry';
-import HometownStateProvinceField from './hometownFields/HometownStateProvinceField';
-import HometownCityField from './hometownFields/HometownCityField';
-import {RegisterReducerAction} from '@/types/reducers';
+import {Stack, TextField} from '@mui/material';
 
-export default function HometownFields({
-  dispatch,
-}: {
-  dispatch: Dispatch<RegisterReducerAction>;
-}): JSX.Element {
+export default function HometownFields(): JSX.Element {
   return (
     <Stack gap={1}>
       <h2>Hometown</h2>
-      <HometownCountry dispatch={dispatch} />
-      <HometownStateProvinceField dispatch={dispatch} />
-      <HometownCityField dispatch={dispatch} />
+      <TextField
+        id="country"
+        label="Country"
+        name="hometown_country"
+        variant="outlined"
+        required
+      />
+      <TextField
+        id="state_province"
+        label="State/province"
+        name="hometown_state_province"
+        variant="outlined"
+      />
+      <TextField
+        id="city"
+        label="City"
+        name="hometown_city"
+        variant="outlined"
+        required
+      />
     </Stack>
   );
 }

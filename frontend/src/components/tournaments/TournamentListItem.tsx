@@ -5,6 +5,7 @@ import {
   Avatar,
   ListItemButton,
   useTheme,
+  Slide,
 } from '@mui/material';
 import TournamentListItemBody from './tournamentListItem/TournamentListItemBody';
 
@@ -17,21 +18,23 @@ export default function TournamentListItem(props: {
   const theme = useTheme();
 
   return (
-    <ListItem disablePadding>
-      <ListItemButton>
-        <ListItemAvatar>
-          <Avatar
-            sx={{backgroundColor: theme.palette.common.white}}
-            alt="tournament-badge"
-            src={props.tournamentAvatar}
-          ></Avatar>
-        </ListItemAvatar>
-        <TournamentListItemBody
-          location={props.location}
-          name={props.name}
-          period={props.period}
-        />
-      </ListItemButton>
-    </ListItem>
+    <Slide direction="up" in>
+      <ListItem disablePadding>
+        <ListItemButton>
+          <ListItemAvatar>
+            <Avatar
+              sx={{backgroundColor: theme.palette.common.white}}
+              alt="tournament-badge"
+              src={props.tournamentAvatar}
+            ></Avatar>
+          </ListItemAvatar>
+          <TournamentListItemBody
+            location={props.location}
+            name={props.name}
+            period={props.period}
+          />
+        </ListItemButton>
+      </ListItem>
+    </Slide>
   );
 }

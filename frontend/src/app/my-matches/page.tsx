@@ -1,11 +1,17 @@
 'use client';
 import InfiniteScrollingList from '@/components/list/InfiniteScrollingList';
 import MatchListItem from '@/components/matches/MatchListItem';
+import {useCheckIfIsAuthenticatedEffect} from '@/lib/hooks';
 import {listMatchesForAuthenticatedPlayer} from '@/lib/services/http/matches';
 import {ListMatchesResponseDataResult} from '@/types/http';
 import {Stack} from '@mui/material';
+import {useRouter} from 'next/navigation';
 
 export default function MyMatches(): JSX.Element {
+  const [isAuthenticated, _] = useCheckIfIsAuthenticatedEffect();
+  const router = useRouter();
+  isAuthenticated ? null : router.push('/login/');
+
   return (
     <Stack>
       <h1>My Matches</h1>
@@ -23,7 +29,7 @@ export default function MyMatches(): JSX.Element {
           );
         }}
         getPageItems={listMatchesForAuthenticatedPlayer}
-        itemVerboseName={''}
+        itemVerboseName={'match'}
       />
     </Stack>
   );

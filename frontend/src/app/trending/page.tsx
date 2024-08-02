@@ -1,14 +1,9 @@
 'use client';
-import {List, Stack} from '@mui/material';
+import {Fade, List, Stack} from '@mui/material';
 import TournamentListItem from '@/components/tournaments/TournamentListItem';
 import dayjs from 'dayjs';
 import {useAppDispatch} from '@/lib/hooks';
-import {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from 'react';
+import {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import {ListTournamentsResponseDataResult} from '@/types/http';
 import {triggerSnackBarOnRequestError} from '@/lib/services/http';
 import {CustomThunkDispatch} from '@/types';
@@ -66,7 +61,11 @@ export default function Trending(): JSX.Element {
   return (
     <Stack>
       <h1>Trending Tournaments</h1>
-      {tournamentsWereFound ? '' : <h2>No tournament was found</h2>}
+      <div style={{position: 'relative'}}>
+        <Fade in={!tournamentsWereFound}>
+          <h2 style={{position: 'absolute'}}>No tournament was found</h2>
+        </Fade>
+      </div>
       <List>
         {tournaments.map(tournamentData => (
           <TournamentListItem

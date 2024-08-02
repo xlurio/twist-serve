@@ -13,6 +13,9 @@ djangologs:
 flush:
 	$(execdjango) sh -c "python manage.py flush"
 
+migrate:
+	$(execdjango) sh -c "python manage.py migrate"
+
 populateplayermatches:
 	$(execdjango) sh -c "python manage.py populateplayermatches --num 30"
 
@@ -29,4 +32,4 @@ stop:
 	$(dockercompose) stop
 
 up:
-	sudo docker compose -f docker-compose.local.yml up -d
+	sudo docker compose -f docker-compose.local.yml up -d --remove-orphans

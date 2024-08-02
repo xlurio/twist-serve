@@ -1,9 +1,10 @@
+import NavigationBar from '@/components/layout/NavigationBar';
 import {AppRouterCacheProvider} from '@mui/material-nextjs/v13-appRouter';
 import type {Metadata, Viewport} from 'next';
 import {ThemeProvider} from '@mui/material/styles';
 import theme from '../theme';
 import CssBaseline from '@mui/material/CssBaseline';
-import {Zoom} from '@mui/material';
+import {Container, Zoom} from '@mui/material';
 import StoreProvider from './StoreProvider';
 
 export const revalidate = 3600;
@@ -30,9 +31,12 @@ export default function RootLayout({
           <AppRouterCacheProvider options={{enableCssLayer: true}}>
             <ThemeProvider theme={theme}>
               <CssBaseline />
-              <Zoom in>
-                <main>{children}</main>
-              </Zoom>
+              <main>
+                <NavigationBar />
+                <Zoom in>
+                  <Container>{children}</Container>
+                </Zoom>
+              </main>
             </ThemeProvider>
           </AppRouterCacheProvider>
         </StoreProvider>

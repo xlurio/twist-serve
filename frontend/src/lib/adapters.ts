@@ -17,6 +17,7 @@ import Cookies from 'js-cookie';
 export function createPlayer(
   data: CreatePlayerRequest
 ): Promise<AxiosResponse<CreatePlayerResponse>> {
+  console.log('data: %s', data);
   return axios.postForm(
     `${process.env.NEXT_PUBLIC_BACKEND_PATH}/players/`,
     data

@@ -29,7 +29,7 @@ export async function listMatchesForAuthenticatedPlayer(
   router: AppRouterInstance
 ) {
   const user = await myAccountData(router);
-  const playerId = user ? user.player : null;
+  const playerId = user?.player || null;
 
   if (playerId) {
     return await cachedListMatches({

@@ -1,18 +1,11 @@
-import {
-  Dispatch,
-  SetStateAction,
-} from 'react';
+'use client';
 import ProfileMenu from './profileMenuController/ProfileMenu';
 import OpenProfileMenuBtn from './profileMenuController/OpenProfileMenuBtn';
-import { useProfileState } from '@/lib/hooks/navigationBar';
+import {useProfileState} from '@/lib/hooks/navigationBar';
 
-export default function ProfileMenuController({
-  setIsAuthenticated,
-}: {
-  setIsAuthenticated: Dispatch<SetStateAction<boolean>>;
-}): JSX.Element {
+export default function ProfileMenuController(): JSX.Element {
   const {reducerState, handleProfileClick, handleCloseMenu, handleLogoutClick} =
-    useProfileState(setIsAuthenticated);
+    useProfileState();
 
   return (
     <div>

@@ -1,7 +1,6 @@
 'use client';
 import {
   Dispatch,
-  SetStateAction,
   useReducer,
   MouseEvent,
   useCallback,
@@ -14,6 +13,8 @@ import {
   NavigationBarReducerActionType,
   NavigationBarReducerState,
 } from '@/types/reducers';
+import {useRouter} from 'next/navigation';
+import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 function _profileMenuReducer(
   prevState: NavigationBarReducerState,
@@ -72,45 +73,51 @@ function _useHandleCloseMenuCallback(
   }, [reducerState, dispatch]);
 }
 
-function _useHandleLogoutClickCallback(
-  setIsAuthenticated: Dispatch<SetStateAction<boolean>>,
-  handleCloseMenu: () => void
-): (_event: MouseEvent) => void {
+function _useHandleLogoutClickCallback({
+  handleCloseMenu,
+  router,
+}: {
+  handleCloseMenu: () => void;
+  router: AppRouterInstance;
+}): (_event: MouseEvent) => void {
   return useCallback(
     (_event: MouseEvent) => {
       Cookies.remove('token');
-      setIsAuthenticated(false);
+      router.refresh();
       handleCloseMenu();
     },
-    [setIsAuthenticated, handleCloseMenu]
+    [handleCloseMenu, router]
   );
 }
 
-function _makeHandlers(
-  dispatch: Dispatch<NavigationBarReducerAction>,
-  setIsAuthenticated: Dispatch<SetStateAction<boolean>>,
-  handleCloseMenu: () => void
-): {
+function _makeHandlers({
+  dispatch,
+  handleCloseMenu,
+  router,
+}: {
+  dispatch: Dispatch<NavigationBarReducerAction>;
+  handleCloseMenu: () => void;
+  router: AppRouterInstance;
+}): {
   handleProfileClick: (event: MouseEvent<HTMLButtonElement>) => void;
   handleLogoutClick: (_event: MouseEvent) => void;
 } {
   return {
     handleProfileClick: _useHandleProfileClickCallback(dispatch),
-    handleLogoutClick: _useHandleLogoutClickCallback(
-      setIsAuthenticated,
-      handleCloseMenu
-    ),
+    handleLogoutClick: _useHandleLogoutClickCallback({
+      handleCloseMenu,
+      router,
+    }),
   };
 }
 
-export function useProfileState(
-  setIsAuthenticated: Dispatch<SetStateAction<boolean>>
-): {
+export function useProfileState(): {
   reducerState: NavigationBarReducerState;
   handleProfileClick: MouseEventHandler<HTMLButtonElement>;
   handleCloseMenu: () => void;
   handleLogoutClick: MouseEventHandler<HTMLLIElement>;
 } {
+  const router = useRouter();
   const [reducerState, dispatch] = useReducer(_profileMenuReducer, {
     shouldShowProfileMenu: false,
     profileMenuAnchorElement: null,
@@ -118,18 +125,16 @@ export function useProfileState(
 
   const handleCloseMenu = _useHandleCloseMenuCallback(reducerState, dispatch);
 
-  const {
-    handleProfileClick,
-    handleLogoutClick,
-  }: {
-    handleProfileClick: MouseEventHandler<HTMLButtonElement>;
-    handleLogoutClick: MouseEventHandler<HTMLLIElement>;
-  } = _makeHandlers(dispatch, setIsAuthenticated, handleCloseMenu);
+  const handlers = _makeHandlers({
+    dispatch,
+    handleCloseMenu,
+    router,
+  });
 
   return {
     reducerState,
-    handleProfileClick,
+    handleProfileClick: handlers.handleProfileClick,
     handleCloseMenu,
-    handleLogoutClick,
+    handleLogoutClick: handlers.handleLogoutClick,
   };
 }
