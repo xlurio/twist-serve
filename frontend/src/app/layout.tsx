@@ -6,6 +6,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import {Zoom} from '@mui/material';
 import StoreProvider from './StoreProvider';
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: 'Tennis Tournaments',
   description: 'Check the next local tournaments',

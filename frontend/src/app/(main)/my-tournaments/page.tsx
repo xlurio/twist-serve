@@ -1,7 +1,7 @@
 'use client'
 import InfiniteScrollingList from '@/components/list/InfiniteScrollingList';
 import TournamentListItem from '@/components/tournaments/TournamentListItem';
-import {listTournamentsForAuthenticatedPlayer} from '@/lib/services/http/tournaments';
+import {cachedListTournamentsForAuthenticatedPlayer} from '@/lib/services/http/tournaments';
 import {ListTournamentsResponseDataResult} from '@/types/http';
 import {Stack} from '@mui/material';
 
@@ -21,7 +21,7 @@ export default function MyTournaments(): JSX.Element {
             />
           );
         }}
-        getPageItems={listTournamentsForAuthenticatedPlayer}
+        getPageItems={cachedListTournamentsForAuthenticatedPlayer}
         itemVerboseName={'tournament'}
       />
     </Stack>

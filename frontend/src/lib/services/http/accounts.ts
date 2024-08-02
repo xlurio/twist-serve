@@ -3,16 +3,19 @@ import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-
 import Cookies from 'js-cookie';
 import {GetAuthenticatedUserResponseData} from '@/types/http';
 import {getAuthenticatedUser, refreshAccessToken} from '@/lib/adapters';
+import {cache} from 'react';
 
-export async function myAccountData(
-  router: AppRouterInstance
-): Promise<GetAuthenticatedUserResponseData | null> {
-  const response = await _refreshOrLogoutOn401({
-    backendRequestCallback: getAuthenticatedUser,
-    router,
-  });
-  return response ? response.data.data : null;
-}
+export const myAccountData = cache(
+  async (
+    router: AppRouterInstance
+  ): Promise<GetAuthenticatedUserResponseData | null> => {
+    const response = await _refreshOrLogoutOn401({
+      backendRequestCallback: getAuthenticatedUser,
+      router,
+    });
+    return response ? response.data.data : null;
+  }
+);
 
 async function _refreshOrLogoutOn401<T>({
   backendRequestCallback,

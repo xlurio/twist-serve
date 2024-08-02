@@ -6,8 +6,9 @@ import {
 import dayjs from 'dayjs';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import {myAccountData} from './accounts';
+import {cache} from 'react';
 
-export async function listTournaments(
+async function listTournaments(
   queryParams: ListTournamentsQueryParameters
 ): Promise<ListTournamentsResponseData> {
   const response = await fetchTournaments(queryParams);
@@ -22,7 +23,9 @@ export async function listTournaments(
   };
 }
 
-export async function listTournamentsForAuthenticatedPlayer(
+export const cachedListTournaments = cache(listTournaments);
+
+async function _listTournamentsForAuthenticatedPlayer(
   queryParams: ListTournamentsQueryParameters,
   router: AppRouterInstance
 ): Promise<ListTournamentsResponseData | null> {
@@ -30,7 +33,7 @@ export async function listTournamentsForAuthenticatedPlayer(
   const playerId = user ? user.player : null;
 
   if (playerId) {
-    return await listTournaments({
+    return await cachedListTournaments({
       ...queryParams,
       subscriptions__player__in: playerId,
     });
@@ -38,3 +41,7 @@ export async function listTournamentsForAuthenticatedPlayer(
 
   return null;
 }
+
+export const cachedListTournamentsForAuthenticatedPlayer = cache(
+  _listTournamentsForAuthenticatedPlayer
+);

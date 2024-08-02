@@ -12,13 +12,13 @@ import {
 import {ListTournamentsResponseDataResult} from '@/types/http';
 import {triggerSnackBarOnRequestError} from '@/lib/services/http';
 import {CustomThunkDispatch} from '@/types';
-import {listTournaments} from '@/lib/services/http/tournaments';
+import {cachedListTournaments} from '@/lib/services/http/tournaments';
 
 function _useFetchTournamentsCallback(
   setTournaments: Dispatch<SetStateAction<ListTournamentsResponseDataResult[]>>
 ) {
   return async () => {
-    const tournamentsData = await listTournaments({
+    const tournamentsData = await cachedListTournaments({
       ordering: '-num_of_subscriptions',
       page_size: 5,
       start_date__gte: dayjs(Date()).format('YYYY-MM-DD'),

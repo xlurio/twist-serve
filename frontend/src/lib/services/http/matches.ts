@@ -6,8 +6,9 @@ import {
 import dayjs from 'dayjs';
 import {myAccountData} from './accounts';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import {cache} from 'react';
 
-export async function listMatches(
+async function _listMatches(
   queryParams: ListMatchesQueryParameters
 ): Promise<ListMatchesResponseData> {
   const response = await fetchMatches(queryParams);
@@ -21,6 +22,8 @@ export async function listMatches(
   };
 }
 
+export const cachedListMatches = cache(_listMatches);
+
 export async function listMatchesForAuthenticatedPlayer(
   queryParams: ListMatchesQueryParameters,
   router: AppRouterInstance
@@ -29,7 +32,7 @@ export async function listMatchesForAuthenticatedPlayer(
   const playerId = user ? user.player : null;
 
   if (playerId) {
-    return await listMatches({
+    return await cachedListMatches({
       ...queryParams,
       player: playerId,
     });

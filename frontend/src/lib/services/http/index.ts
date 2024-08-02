@@ -1,12 +1,10 @@
-import {
-  BackendResponse,
-  GetTokenRequest,
-} from '@/types/http';
+import {BackendResponse, GetTokenRequest} from '@/types/http';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import {getToken} from '../../adapters';
 import {AxiosError, isAxiosError} from 'axios';
 import {CustomThunkDispatch} from '@/types';
 import {setMessage} from '../../features/snackBarSlice';
+
 export async function redirectAfterLogin({
   email,
   password,
