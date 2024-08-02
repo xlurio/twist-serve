@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("matches", "0002_alter_matchgame_player1_points_and_more"),
     ]
