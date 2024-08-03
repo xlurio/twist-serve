@@ -1,11 +1,10 @@
 'use client'
 import {
   GetPageItems,
-  ListMatchesResponseData,
-  ListMatchesResponseDataResult,
-} from '@/types/http';
+} from '@/types/http/base';
 import InfiniteScrollingList from '../list/InfiniteScrollingList';
 import MatchListItem from './matchList/MatchListItem';
+import { ListMatchesResponseData, ListMatchesResponseDataResult } from '@/types/http/matches';
 
 export default function MatchInfiniteScrollList({
   getPageItems,

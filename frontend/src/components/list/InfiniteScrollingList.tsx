@@ -5,7 +5,7 @@ import {
   BackendPaginatedResponseData,
   BackendPaginatedResponseDataResult,
   GetPageItems,
-} from '@/types/http';
+} from '@/types/http/base';
 import {List} from '@mui/material';
 import InfiniteScrollingNotFound from './infiniteScrollingList/InfiniteScrollingNotFound';
 

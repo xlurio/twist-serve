@@ -1,12 +1,12 @@
 import {getMatches} from '@/lib/adapters';
-import {
-  ListMatchesQueryParameters,
-  ListMatchesResponseData,
-} from '@/types/http';
 import dayjs from 'dayjs';
 import {retrieveAuthenticatedAccount} from './accounts';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import {cache} from 'react';
+import {
+  ListMatchesQueryParameters,
+  ListMatchesResponseData,
+} from '@/types/http/matches';
 
 async function listMatches(
   queryParams: ListMatchesQueryParameters

@@ -2,8 +2,8 @@ import {Dispatch} from 'react';
 import {MissingActionRequiredValue} from '../errors';
 import {postPlayers} from '../adapters';
 import {isAxiosError} from 'axios';
-import {CreatePlayerRequest} from '@/types/http';
 import {ReducerAction, ReducerActionType, ReducerState} from '@/types/reducers';
+import { CreatePlayerRequest } from '@/types/http/players';
 
 export function executeReducerAction<
   T extends ReducerState,

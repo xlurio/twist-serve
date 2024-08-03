@@ -1,19 +1,26 @@
+import {GetAuthenticatedUserResponse} from '@/types/http/accounts';
 import {
-  CreatePlayerRequest,
-  CreatePlayerResponse,
-  ListTournamentsQueryParameters,
-  ListTournamentsResponse,
   ListMatchesQueryParameters,
   ListMatchesResponse,
-  GetAuthenticatedUserResponse,
+} from '@/types/http/matches';
+import {CreatePlayerRequest, CreatePlayerResponse} from '@/types/http/players';
+import {
+  ListRoundsQueryParameters,
+  ListRoundsResponse,
+} from '@/types/http/rounds';
+import {
   GetTokenRequest,
   GetTokenResponse,
   RefreshTokenRequest,
   RefreshTokenResponse,
-  ListRoundsQueryParameters,
-  ListRoundsResponse,
+} from '@/types/http/token';
+import {
+  CreateTournamentRequest,
+  CreateTournamentResponse,
+  ListTournamentsQueryParameters,
+  ListTournamentsResponse,
   RetrieveTournamentResponse,
-} from '@/types/http';
+} from '@/types/http/tournaments';
 import axios, {AxiosResponse} from 'axios';
 import Cookies from 'js-cookie';
 
@@ -46,6 +53,20 @@ export function postPlayers(
 }
 
 // tournaments
+
+export function postTournaments(
+  data: CreateTournamentRequest
+): Promise<AxiosResponse<CreateTournamentResponse>> {
+  return axios.postForm(
+    `${process.env.NEXT_PUBLIC_BACKEND_PATH}/tournaments/`,
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${Cookies.get('token')}`,
+      },
+    }
+  );
+}
 
 export function getTournaments(
   queryParams: ListTournamentsQueryParameters

@@ -2,7 +2,7 @@
 import InfiniteScrollingList from '@/components/list/InfiniteScrollingList';
 import TournamentListItem from '@/components/tournaments/TournamentListItem';
 import {cachedListTournamentsForAuthenticatedPlayer} from '@/lib/services/http/tournaments';
-import {ListTournamentsResponseDataResult} from '@/types/http';
+import { ListTournamentsResponseDataResult } from '@/types/http/tournaments';
 import {Stack} from '@mui/material';
 
 export default function MyTournaments(): JSX.Element {

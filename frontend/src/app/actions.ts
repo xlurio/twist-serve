@@ -1,15 +1,15 @@
 'use server';
 import {redirect} from 'next/navigation';
 import {getMessageForRequestError} from '../lib/services';
-import {
-  BackendResponse,
-  CreatePlayerRequest,
-  GetTokenRequest,
-} from '@/types/http';
 import {postPlayers, postToken} from '@/lib/adapters';
 import {cookies} from 'next/headers';
 import dayjs from 'dayjs';
 import {AxiosError} from 'axios';
+import {createTournament} from '@/lib/services/http/tournaments';
+import { BackendResponse } from '@/types/http/base';
+import { CreatePlayerRequest, BestHand, Backhand } from '@/types/http/players';
+import { GetTokenRequest } from '@/types/http/token';
+import { CourtSurface } from '@/types/http/tournaments';
 
 export async function loginFromFormAction(
   _: {errorMessage: string},
@@ -28,6 +28,50 @@ export async function loginFromFormAction(
     };
   }
   redirect('/');
+}
+
+export async function createTournamentFromFormAction(
+  _: {errorMessage: string},
+  formData: FormData
+) {
+  let pathToRedirect = '/tournaments/';
+
+  try {
+    const newTournament = await createTournament(
+      _makeCreateTournamentPayloadFromFormData(formData)
+    );
+    const tournamentId = newTournament ? newTournament.id : null;
+    pathToRedirect = tournamentId
+      ? `/tournaments/${tournamentId}`
+      : pathToRedirect;
+  } catch (error) {
+    console.trace(error);
+    return {
+      errorMessage: getMessageForRequestError(error),
+    };
+  }
+
+  redirect(pathToRedirect);
+}
+
+function _makeCreateTournamentPayloadFromFormData(formData: FormData) {
+  const avatars = (formData.get('avatar') || []) as unknown as File[];
+  return {
+    name: formData.get('name') as unknown as string,
+    avatar: avatars.length > 0 ? avatars[0] : null,
+    country: formData.get('country') as unknown as string,
+    state_province: formData.get('state_province') as unknown as string,
+    city: formData.get('city') as unknown as string,
+    neighborhood: formData.get('neighborhood') as unknown as string,
+    street: formData.get('street') as unknown as string,
+    building_number: formData.get('building_number') as unknown as number,
+    complement: formData.get('complement') as unknown as string,
+    instalation: formData.get('instalation') as unknown as string,
+    start_date: formData.get('start_date') as unknown as string,
+    end_date: formData.get('end_date') as unknown as string,
+    surface: formData.get('surface') as unknown as CourtSurface,
+    slots: formData.get('slots') as unknown as number,
+  };
 }
 
 export async function registerFromFormAction(
@@ -77,8 +121,8 @@ function _makeRegisterPayloadFromFormData(
     hometown_city: formData.get('hometown_city') as string,
     weight: formData.get('weight') as string,
     height: formData.get('height') as string,
-    best_hand: formData.get('best_hand') as string,
-    backhand: formData.get('backhand') as string,
+    best_hand: formData.get('best_hand') as BestHand,
+    backhand: formData.get('backhand') as Backhand,
   };
 }
 
@@ -112,7 +156,6 @@ async function _loginOnServerSide({
 } & GetTokenRequest) {
   const response = await postToken({email, password});
   if (rememberMe) {
-    cookies().set('token', response.data.data.access);
     cookies().set({
       name: 'refresh',
       value: response.data.data.access,
@@ -121,4 +164,5 @@ async function _loginOnServerSide({
   }
 
   cookies().set('token', response.data.data.access);
+  cookies().set('role', response.data.data.role);
 }

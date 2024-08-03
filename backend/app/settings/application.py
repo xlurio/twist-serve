@@ -123,47 +123,47 @@ MEDIA_URL = "media/"
 
 # Logging
 
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "django.server": {
-            "()": "django.utils.log.ServerFormatter",
-            "format": "[{server_time}] {message}",
-            "style": "{",
-        }
-    },
-    "handlers": {
-        "console": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-        },
-        "file": {
-            "level": "INFO",
-            "class": "logging.FileHandler",
-            "filename": "/var/log/django.log",
-        },
-        "django.server.console": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "formatter": "django.server",
-        },
-        "django.server.file": {
-            "level": "INFO",
-            "class": "logging.FileHandler",
-            "filename": "/var/log/django.log",
-            "formatter": "django.server",
-        },
-    },
-    "loggers": {
-        "django": {
-            "handlers": ["console", "file"],
-            "level": "INFO",
-        },
-        "django.server": {
-            "handlers": ["django.server.console", "django.server.file"],
-            "level": "INFO",
-            "propagate": False,
-        },
-    },
-}
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#     "formatters": {
+#         "django.server": {
+#             "()": "django.utils.log.ServerFormatter",
+#             "format": "[{server_time}] {message}",
+#             "style": "{",
+#         }
+#     },
+#     "handlers": {
+#         "console": {
+#             "level": "INFO",
+#             "class": "logging.StreamHandler",
+#         },
+#         "file": {
+#             "level": "INFO",
+#             "class": "logging.FileHandler",
+#             "filename": "/var/log/django.log",
+#         },
+#         "django.server.console": {
+#             "level": "INFO",
+#             "class": "logging.StreamHandler",
+#             "formatter": "django.server",
+#         },
+#         "django.server.file": {
+#             "level": "INFO",
+#             "class": "logging.FileHandler",
+#             "filename": "/var/log/django.log",
+#             "formatter": "django.server",
+#         },
+#     },
+#     "loggers": {
+#         "django": {
+#             "handlers": ["console", "file"],
+#             "level": "INFO",
+#         },
+#         "django.server": {
+#             "handlers": ["django.server.console", "django.server.file"],
+#             "level": "INFO",
+#             "propagate": False,
+#         },
+#     },
+# }

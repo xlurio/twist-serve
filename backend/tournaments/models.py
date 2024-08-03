@@ -30,14 +30,14 @@ class Tournament(BaseModel):
         _("avatar"), upload_to=_get_tournament_avatar_dest_path, blank=True, null=True
     )
     country = models.TextField(_("country"))
-    state_province = models.TextField(_("state/province"))
+    state_province = models.TextField(_("state/province"), blank=True)
     city = models.TextField(_("city"))
-    neighborhood = models.TextField(_("neighborhood"), null=True, blank=True)
+    neighborhood = models.TextField(_("neighborhood"), blank=True)
     street = models.TextField(_("street"))
     building_number = models.PositiveIntegerField(
         _("building number"), null=True, blank=True
     )
-    complement = models.TextField(_("complement"), null=True, blank=True)
+    complement = models.TextField(_("complement"), blank=True)
     instalation = models.TextField(_("instalation"))
     start_date = models.DateField(_("start date"))
     end_date = models.DateField(_("end date"))

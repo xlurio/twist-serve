@@ -4,7 +4,7 @@ import {
   BackendPaginatedResponseDataResult,
   BackendPaginatedResponseData,
   ListRequestQueryParameters,
-} from '@/types/http';
+} from '@/types/http/base';
 import {
   InfiniteScrollReducerState,
   InfiniteScrollReducerAction,

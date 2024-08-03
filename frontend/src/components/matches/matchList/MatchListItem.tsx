@@ -1,6 +1,6 @@
 import {ListItem, ListItemButton, Slide, Stack, Typography} from '@mui/material';
 import MatchListItemPlayerScore from './matchListItem/MatchListItemPlayerScore';
-import { ListMatchResponseDataResultPlayer } from '@/types/http';
+import { ListMatchResponseDataResultPlayer } from '@/types/http/matches';
 
 export default function MatchListItem({
   player1,

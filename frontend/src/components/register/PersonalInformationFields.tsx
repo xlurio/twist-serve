@@ -2,8 +2,8 @@ import {Stack} from '@mui/material';
 import NumberField from '@/components/forms/NumberField';
 import FirstNameField from './personalInformationFields/FirstNameField';
 import LastNameField from './personalInformationFields/LastNameField';
-import DateOfBirthField from './personalInformationFields/DateOfBirthField';
-import AvatarField from './personalInformationFields/AvatarField';
+import DatePickerField from '../forms/DateOfBirthField';
+import AvatarField from '../forms/AvatarField';
 
 export default function PersonalInformationFields(): JSX.Element {
   return (
@@ -12,7 +12,7 @@ export default function PersonalInformationFields(): JSX.Element {
       <AvatarField />
       <FirstNameField />
       <LastNameField />
-      <DateOfBirthField />
+      <DatePickerField name="date_of_birth" label="Date of birth" />
       <NumberField
         id="weight"
         label="Weight (kg)"

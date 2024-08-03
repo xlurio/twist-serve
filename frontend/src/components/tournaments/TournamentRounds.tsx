@@ -8,9 +8,9 @@ import {
   Dispatch,
   MutableRefObject,
 } from 'react';
-import {ListRoundsResponseDataResult} from '@/types/http';
 import RoundTabPanel from './tournamentRounds/RoundTabPanel';
 import RoundTabs from './tournamentRounds/RoundTabs';
+import { ListRoundsResponseDataResult } from '@/types/http/rounds';
 
 function _useTournamentRounds(): [
   number,

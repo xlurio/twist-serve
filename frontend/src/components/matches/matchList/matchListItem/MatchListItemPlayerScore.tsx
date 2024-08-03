@@ -1,4 +1,4 @@
-import {ListMatchResponseDataResultPlayer} from '@/types/http';
+import { ListMatchResponseDataResultPlayer } from '@/types/http/matches';
 import {Grid, Typography} from '@mui/material';
 
 export default function MatchListItemPlayerScore({

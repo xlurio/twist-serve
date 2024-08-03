@@ -1,12 +1,25 @@
-import {getTournament, getTournaments} from '@/lib/adapters';
+import {postTournaments, getTournaments, getTournament} from '@/lib/adapters';
 import {
+  CreateTournamentRequest,
+  CreateTournamentResponseData,
   ListTournamentsQueryParameters,
   ListTournamentsResponseData,
-} from '@/types/http';
+} from '@/types/http/tournaments';
 import dayjs from 'dayjs';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import {retrieveAuthenticatedAccount} from './accounts';
 import {cache} from 'react';
+import {retrieveAuthenticatedAccount} from './accounts';
+import {refreshOrLogoutServerSide} from './refreshOrLogoutServerSide';
+
+export async function createTournament(
+  data: CreateTournamentRequest
+): Promise<CreateTournamentResponseData | null> {
+  const response = await refreshOrLogoutServerSide(() => {
+    return postTournaments(data);
+  });
+
+  return response?.data.data || null;
+}
 
 async function listTournaments(
   queryParams: ListTournamentsQueryParameters

@@ -1,7 +1,7 @@
-import {ListRoundsResponseDataResult} from '@/types/http';
 import {Box, Tabs} from '@mui/material';
 import RoundTab from './RoundTab';
 import {Dispatch, ForwardedRef, forwardRef, SetStateAction} from 'react';
+import { ListRoundsResponseDataResult } from '@/types/http/rounds';
 
 interface RoundTabsProps {
   currentTab: number;

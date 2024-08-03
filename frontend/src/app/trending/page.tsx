@@ -4,10 +4,10 @@ import TournamentListItem from '@/components/tournaments/TournamentListItem';
 import dayjs from 'dayjs';
 import {useAppDispatch} from '@/lib/hooks';
 import {Dispatch, SetStateAction, useEffect, useState} from 'react';
-import {ListTournamentsResponseDataResult} from '@/types/http';
 import {triggerSnackBarOnRequestError} from '@/lib/services/http';
 import {CustomThunkDispatch} from '@/types';
 import {cachedListTournaments} from '@/lib/services/http/tournaments';
+import { ListTournamentsResponseDataResult } from '@/types/http/tournaments';
 
 function _useFetchTournamentsCallback(
   setTournaments: Dispatch<SetStateAction<ListTournamentsResponseDataResult[]>>

@@ -4,7 +4,7 @@ import {
   BackendPaginatedResponseData,
   BackendPaginatedResponseDataResult,
   ListRequestQueryParameters,
-} from '@/types/http';
+} from '@/types/http/base';
 import {InfiniteScrollReducerState} from '@/types/reducers';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import {useRouter} from 'next/navigation';

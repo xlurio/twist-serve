@@ -45,7 +45,7 @@ export function useInfiniteScrollingObserverEffect<T>({
         loadingRef: loadingRef as MutableRefObject<HTMLLIElement>,
       });
     }
-  }, [loadingRef.current, infiniteScrollState.isFetching]);
+  }, [loadingRef, infiniteScrollState.isFetching]);
 }
 
 function _setupObserver<T>({
