@@ -2,11 +2,18 @@ from __future__ import annotations
 
 import pathlib
 import uuid
+from typing import TYPE_CHECKING
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from core.models import BaseModel
+from tournaments.choices import SurfaceChoices
+
+if TYPE_CHECKING:
+    from django.db.models.manager import RelatedManager
+
+    from rounds.models import Round
 
 
 def _get_tournament_avatar_dest_path(instance: Tournament, filename: str) -> str:
@@ -16,6 +23,8 @@ def _get_tournament_avatar_dest_path(instance: Tournament, filename: str) -> str
 
 
 class Tournament(BaseModel):
+    rounds: RelatedManager[Round]
+
     name = models.TextField(_("name"))
     avatar = models.ImageField(
         _("avatar"), upload_to=_get_tournament_avatar_dest_path, blank=True, null=True
@@ -30,15 +39,16 @@ class Tournament(BaseModel):
     )
     complement = models.TextField(_("complement"), null=True, blank=True)
     instalation = models.TextField(_("instalation"))
-    winner = models.ForeignKey(
-        "players.Player",
-        models.RESTRICT,
-        related_name="titles",
-        verbose_name=_("winner"),
-        null=True,
-    )
     start_date = models.DateField(_("start date"))
     end_date = models.DateField(_("end date"))
+    surface = models.CharField(
+        _("surface"), max_length=6, choices=SurfaceChoices.choices
+    )
+
+    @property
+    def slots(self) -> int:
+        first_round = self.rounds.order_by("-number_of_players").first()
+        return first_round.number_of_players if first_round else 0
 
     class Meta:
         verbose_name = _("tournament")

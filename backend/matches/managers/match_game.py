@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from django.db import models
 
-from matches.choices import WinnerChoices
+from matches.choices import MatchPlayerChoices
 
 if TYPE_CHECKING:
     from matches.models import MatchGame, MatchSet
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 class MatchGameQuerySetMixin:
     def get_match_set_winner(
         self: MatchGameQuerySet, match_set: MatchSet
-    ) -> WinnerChoices:
+    ) -> MatchPlayerChoices:
         player1_wins_filter = models.Q(player1_points__gt=models.F("player2_points"))
         player2_wins_filter = models.Q(player2_points__gt=models.F("player1_points"))
         set_result = self.filter(game_set=match_set).aggregate(
@@ -26,9 +26,9 @@ class MatchGameQuerySetMixin:
         did_player1_won = set_result["player1_wins"] > set_result["player2_wins"]
 
         if did_player1_won:
-            return WinnerChoices.PLAYER_1
+            return MatchPlayerChoices.PLAYER_1
 
-        return WinnerChoices.PLAYER_2
+        return MatchPlayerChoices.PLAYER_2
 
 
 class MatchGameQuerySet(MatchGameQuerySetMixin, models.QuerySet["MatchGame"]): ...

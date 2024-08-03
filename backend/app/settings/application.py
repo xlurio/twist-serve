@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "core",
     "matches",
     "players",
+    "rounds",
     "subscriptions",
     "tournaments",
 ]

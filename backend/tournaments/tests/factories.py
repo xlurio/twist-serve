@@ -7,26 +7,18 @@ from typing import TYPE_CHECKING
 
 import factory
 import faker
-from django.utils import timezone
 from factory import django
 
-from players.tests.factories import PlayerFactory
+from tournaments.choices import SurfaceChoices
 
 if TYPE_CHECKING:
-    from players.models import Player
+    pass
 
 
 def _generate_three_words_name() -> str:
     return (
         faker.Faker().word() + " " + faker.Faker().word() + " " + faker.Faker().word()
     )
-
-
-def _generate_winner(self: TournamentFactory) -> Player | None:
-    if self.start_date <= timezone.localdate():
-        return PlayerFactory.create()
-
-    return None
 
 
 def _get_random_ascii_upper() -> str:
@@ -52,4 +44,4 @@ class TournamentFactory(django.DjangoModelFactory):
     end_date = factory.LazyAttribute(
         lambda self: self.start_date + datetime.timedelta(14)
     )
-    winner = factory.LazyAttribute(_generate_winner)
+    surface = factory.Faker("enum", enum_cls=SurfaceChoices)

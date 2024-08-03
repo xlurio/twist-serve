@@ -103,7 +103,6 @@ class PlayerWriteSerializer(serializers.ModelSerializer[Player]):
         for field, value in validated_data.items():
             setattr(instance, field, value)
 
-        instance.clean()
         instance.save()
 
         save_file_to_file_field.delay(

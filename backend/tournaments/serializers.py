@@ -16,3 +16,19 @@ class TournamentSerializer(serializers.ModelSerializer[Tournament]):
             "city",
         )
         read_only_fields = fields
+
+
+class TournamentDetailSerializer(serializers.ModelSerializer[Tournament]):
+    class Meta:
+        model = Tournament
+        fields = (
+            "id",
+            "name",
+            "avatar",
+            "start_date",
+            "end_date",
+            "country",
+            "city",
+            "surface",
+            "slots",
+        )

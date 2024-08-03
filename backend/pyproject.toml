@@ -60,9 +60,9 @@ disable=["broad-exception-caught",
 load-plugins=["pylint_django"]
 
 [tool.pylint.design]
-max-args = 3
+max-args = 4
 max-branches = 1
-max-module-lines=200
+max-module-lines = 200
 max-statements = 10
 
 [tool.pylint.refactor]

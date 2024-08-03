@@ -1,5 +1,8 @@
-from django.urls import path
+from rest_framework import routers
 
-from tournaments.views import TournamentListAPIView
+from tournaments.views import TournamentViewSet
 
-urlpatterns = [path("", TournamentListAPIView.as_view())]
+router = routers.SimpleRouter()
+router.register(r"", TournamentViewSet)
+
+urlpatterns = router.urls

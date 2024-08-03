@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+from collections.abc import Iterable
 from typing import TYPE_CHECKING, cast
 
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
@@ -8,11 +11,13 @@ from accounts.managers import UserManager
 from core.models import BaseModel
 
 if TYPE_CHECKING:
+    from django.db.models.base import ModelBase
+
     from players.models import Player
 
 
 class User(BaseModel, AbstractBaseUser, PermissionsMixin):
-    player: "Player"
+    player: Player
 
     first_name = models.CharField(_("first name"), max_length=150, blank=True)
     last_name = models.CharField(_("last name"), max_length=150, blank=True)
@@ -47,8 +52,21 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
     def full_name(self) -> str:
         return f"{self.first_name} {self.last_name}".strip()
 
-    def clean(self) -> None:
-        super().clean()
-        self.email = cast("UserManager", self.__class__.objects).normalize_email(
-            self.email
+    # pylint: disable-next=too-many-arguments, arguments-differ
+    def save(
+        self,
+        force_insert: bool | tuple[ModelBase, ...] = False,
+        force_update: bool = False,
+        using: str | None = None,
+        update_fields: Iterable[str] | None = None,
+    ) -> None:
+        will_email_be_updated = (
+            "email" in update_fields if update_fields else update_fields is None
         )
+
+        if will_email_be_updated:
+            self.email = cast("UserManager", self.__class__.objects).normalize_email(
+                self.email
+            )
+
+        return super().save(force_insert, force_update, using, update_fields)

@@ -7,13 +7,15 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from core.models import BaseModel
-from matches.choices import PointChoices, WinnerChoices
+from matches.choices import MatchPlayerChoices, PointChoices
 from matches.managers import MatchGameManager, MatchManager, MatchSetManager
+from matches.managers.match2match_rel import Match2MatchRelationshipManager
 
 if TYPE_CHECKING:
     from django.db.models.manager import RelatedManager
 
     from players.models import Player
+    from rounds.models import Round
 
 
 class MatchGame(BaseModel):
@@ -36,13 +38,13 @@ class MatchGame(BaseModel):
     objects = MatchGameManager()
 
     @property
-    def winner(self) -> WinnerChoices:
+    def winner(self) -> MatchPlayerChoices:
         did_player1_won = self.player1_points > self.player2_points
 
         if did_player1_won:
-            return WinnerChoices.PLAYER_1
+            return MatchPlayerChoices.PLAYER_1
 
-        return WinnerChoices.PLAYER_2
+        return MatchPlayerChoices.PLAYER_2
 
     class Meta:
         verbose_name = _("game")
@@ -57,7 +59,9 @@ class MatchGame(BaseModel):
 class MatchSet(BaseModel):
     games: RelatedManager[MatchGame]
 
-    position = models.PositiveIntegerField(_("position"))
+    position = models.PositiveIntegerField(
+        _("position"), validators=[validators.MinValueValidator(1)]
+    )
     match = models.ForeignKey(
         "matches.Match",
         on_delete=models.RESTRICT,
@@ -67,7 +71,7 @@ class MatchSet(BaseModel):
 
     objects = MatchSetManager()
 
-    def get_winner(self) -> WinnerChoices:
+    def get_winner(self) -> MatchPlayerChoices:
         return cast(
             MatchGameManager, self.games.filter(is_active=True)
         ).get_match_set_winner(self)
@@ -83,40 +87,64 @@ class MatchSet(BaseModel):
 
 
 class Match(BaseModel):
+    next_match_relationships: RelatedManager[Match2MatchRelationship]
+    previous_match_relationships: RelatedManager[Match2MatchRelationship]
     sets: RelatedManager[MatchSet]
 
-    player1: models.ForeignKey[Player] = models.ForeignKey(
+    player1: models.ForeignKey[Player | None, Player | None] = models.ForeignKey(
         "players.Player",
         on_delete=models.RESTRICT,
         related_name="matches_as_player1",
         verbose_name=_("player 1"),
+        null=True,
+        blank=True,
     )
-    player2: models.ForeignKey[Player] = models.ForeignKey(
+    player2: models.ForeignKey[Player | None, Player | None] = models.ForeignKey(
         "players.Player",
         on_delete=models.RESTRICT,
         related_name="matches_as_player2",
         verbose_name=_("player 2"),
+        null=True,
+        blank=True,
     )
     date = models.DateField(_("date"))
-    observation = models.TextField(_("observation"))
-    tournament = models.ForeignKey(
-        "tournaments.Tournament",
-        models.CASCADE,
+    observation = models.TextField(_("observation"), blank=True)
+    match_round_id: int
+    match_round: models.ForeignKey[Round, Round] = models.ForeignKey(
+        "rounds.Round",
+        models.RESTRICT,
         related_name="matches",
-        verbose_name=_("tournament"),
+        verbose_name=_("round"),
     )
 
     objects = MatchManager()
-
-    @property
-    def sets_won_by_player1(self) -> int:
-        return cast("MatchSetManager", self.sets).count_won_by_player1()
-
-    @property
-    def sets_won_by_player2(self) -> int:
-        return cast("MatchSetManager", self.sets).count_won_by_player2()
 
     class Meta:
         verbose_name = _("match")
         verbose_name_plural = _("matches")
         ordering = ("-date",)
+
+
+class Match2MatchRelationship(BaseModel):
+    position = models.CharField(
+        _("position"), max_length=8, choices=MatchPlayerChoices.choices
+    )
+    previous_match = models.ForeignKey(
+        "matches.Match", models.CASCADE, related_name="next_match_relationships"
+    )
+    next_match = models.ForeignKey(
+        "matches.Match", models.CASCADE, related_name="previous_match_relationships"
+    )
+
+    objects = Match2MatchRelationshipManager()
+
+    class Meta:
+        verbose_name = _("match")
+        verbose_name_plural = _("matches")
+        ordering = ("position",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["position", "previous_match", "next_match"],
+                name="unique_position_prev_next",
+            )
+        ]

@@ -10,4 +10,4 @@ class MatchFilterSet(django_filters.FilterSet):
 
     class Meta:
         model = Match
-        fields = ("player",)
+        fields = ("player", "match_round")

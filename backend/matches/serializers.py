@@ -18,12 +18,14 @@ class MatchSerializer(serializers.ModelSerializer[Match]):
 
     def get_player1(self, obj: Match) -> Mapping[str, Any]:
         return {
+            "previous_match": getattr(obj, "player1_previous_match"),
             "name": getattr(obj, "player1_full_name"),
             "sets_won": getattr(obj, "sets_won_by_player1_count") or 0,
         }
 
     def get_player2(self, obj: Match) -> Mapping[str, Any]:
         return {
+            "previous_match": getattr(obj, "player2_previous_match"),
             "name": getattr(obj, "player2_full_name"),
             "sets_won": getattr(obj, "sets_won_by_player2_count") or 0,
         }

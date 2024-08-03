@@ -17,7 +17,8 @@ class MatchListAPIView(generics.ListAPIView[Match]):
     queryset = (
         cast("MatchQuerySet", Match.objects.filter(is_active=True))
         .annotate_players_full_name()
-        .annotate_sets_won_by_players_count()
+        .annotate_sets_won_by_each_player_count()
+        .annotate_previous_match_for_each_player()
     )
     serializer_class = MatchSerializer
     filter_backends = [backends.DjangoFilterBackend]
