@@ -1,17 +1,14 @@
 import {ListItem, ListItemButton, Slide, Stack, Typography} from '@mui/material';
 import MatchListItemPlayerScore from './matchListItem/MatchListItemPlayerScore';
+import { ListMatchResponseDataResultPlayer } from '@/types/http';
 
 export default function MatchListItem({
   player1,
-  player1Score,
   player2,
-  player2Score,
   date,
 }: {
-  player1: string;
-  player1Score: number;
-  player2: string;
-  player2Score: number;
+  player1:   ListMatchResponseDataResultPlayer;
+  player2:   ListMatchResponseDataResultPlayer;
   date: string;
 }): JSX.Element {
   return (
@@ -20,8 +17,8 @@ export default function MatchListItem({
         <ListItemButton>
           <Stack sx={{width: '100%'}}>
             <Typography variant="caption">{date}</Typography>
-            <MatchListItemPlayerScore player={player1} score={player1Score} />
-            <MatchListItemPlayerScore player={player2} score={player2Score} />
+            <MatchListItemPlayerScore player={player1} />
+            <MatchListItemPlayerScore player={player2} />
           </Stack>
         </ListItemButton>
       </ListItem>

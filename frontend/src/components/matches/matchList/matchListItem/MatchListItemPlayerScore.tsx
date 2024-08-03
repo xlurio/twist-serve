@@ -1,20 +1,20 @@
+import {ListMatchResponseDataResultPlayer} from '@/types/http';
 import {Grid, Typography} from '@mui/material';
-
 
 export default function MatchListItemPlayerScore({
   player,
-  score,
 }: {
-  player: string;
-  score: number;
+  player: ListMatchResponseDataResultPlayer;
 }): JSX.Element {
   return (
     <Grid container>
       <Grid item xs={10}>
-        <Typography variant="h6">{player}</Typography>
+        <Typography variant="h6">
+          {player.name || player.previous_match?.toString() || ''}
+        </Typography>
       </Grid>
       <Grid item xs={2} sx={{display: 'flex', alignItems: 'center'}}>
-        <Typography>{score}</Typography>
+        <Typography>{player.sets_won}</Typography>
       </Grid>
     </Grid>
   );

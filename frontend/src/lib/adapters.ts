@@ -10,21 +10,44 @@ import {
   GetTokenResponse,
   RefreshTokenRequest,
   RefreshTokenResponse,
+  ListRoundsQueryParameters,
+  ListRoundsResponse,
+  RetrieveTournamentResponse,
 } from '@/types/http';
 import axios, {AxiosResponse} from 'axios';
 import Cookies from 'js-cookie';
 
-export function createPlayer(
+// token
+
+export function postToken(
+  data: GetTokenRequest
+): Promise<AxiosResponse<GetTokenResponse>> {
+  return axios.post(`${process.env.NEXT_PUBLIC_BACKEND_PATH}/token/`, data);
+}
+
+export function postTokenRefresh(
+  data: RefreshTokenRequest
+): Promise<AxiosResponse<RefreshTokenResponse>> {
+  return axios.post(
+    `${process.env.NEXT_PUBLIC_BACKEND_PATH}/token/refresh/`,
+    data
+  );
+}
+
+// players
+
+export function postPlayers(
   data: CreatePlayerRequest
 ): Promise<AxiosResponse<CreatePlayerResponse>> {
-  console.log('data: %s', data);
   return axios.postForm(
     `${process.env.NEXT_PUBLIC_BACKEND_PATH}/players/`,
     data
   );
 }
 
-export function fetchTournaments(
+// tournaments
+
+export function getTournaments(
   queryParams: ListTournamentsQueryParameters
 ): Promise<AxiosResponse<ListTournamentsResponse>> {
   return axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PATH}/tournaments/`, {
@@ -32,7 +55,17 @@ export function fetchTournaments(
   });
 }
 
-export function fetchMatches(
+export function getTournament(
+  tournamentId: number
+): Promise<AxiosResponse<RetrieveTournamentResponse>> {
+  return axios.get(
+    `${process.env.NEXT_PUBLIC_BACKEND_PATH}/tournaments/${tournamentId}/`
+  );
+}
+
+// matches
+
+export function getMatches(
   queryParams: ListMatchesQueryParameters
 ): Promise<AxiosResponse<ListMatchesResponse>> {
   return axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PATH}/matches/`, {
@@ -40,7 +73,9 @@ export function fetchMatches(
   });
 }
 
-export function getAuthenticatedUser(): Promise<
+// accounts
+
+export function getAccountsMe(): Promise<
   AxiosResponse<GetAuthenticatedUserResponse>
 > {
   return axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PATH}/accounts/me/`, {
@@ -50,17 +85,12 @@ export function getAuthenticatedUser(): Promise<
   });
 }
 
-export function getToken(
-  data: GetTokenRequest
-): Promise<AxiosResponse<GetTokenResponse>> {
-  return axios.post(`${process.env.NEXT_PUBLIC_BACKEND_PATH}/token/`, data);
-}
+// rounds
 
-export function refreshAccessToken(
-  data: RefreshTokenRequest
-): Promise<AxiosResponse<RefreshTokenResponse>> {
-  return axios.post(
-    `${process.env.NEXT_PUBLIC_BACKEND_PATH}/token/refresh/`,
-    data
-  );
+export function getRounds(
+  queryParams: ListRoundsQueryParameters
+): Promise<AxiosResponse<ListRoundsResponse>> {
+  return axios.get(`${process.env.NEXT_PUBLIC_BACKEND_PATH}/tournaments/`, {
+    params: queryParams,
+  });
 }

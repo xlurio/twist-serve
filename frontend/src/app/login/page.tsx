@@ -2,7 +2,6 @@
 import {Button, Link, Stack} from '@mui/material';
 import LoginFields from '@/components/login/LoginFields';
 import {useRouter} from 'next/navigation';
-import {useCheckIfIsAuthenticatedEffect} from '@/lib/hooks';
 import {loginFromFormAction} from '@/app/actions';
 import {useFormState} from 'react-dom';
 import {useEffect} from 'react';
@@ -10,7 +9,6 @@ import FormErrorAlert from '@/components/forms/FormErrorAlert';
 
 export default function Login() {
   const router = useRouter();
-  const [isAuthenticated, _] = useCheckIfIsAuthenticatedEffect();
   const [state, formAction] = useFormState(loginFromFormAction, {
     errorMessage: '',
   });
@@ -18,10 +16,6 @@ export default function Login() {
   useEffect(() => {
     router.prefetch('/');
   }, []);
-
-  if (isAuthenticated) {
-    router.push('/');
-  }
 
   return (
     <form action={formAction}>

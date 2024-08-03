@@ -4,16 +4,10 @@ import {useInfiniteScrollingState} from '@/lib/hooks/infiniteScrolling';
 import {
   BackendPaginatedResponseData,
   BackendPaginatedResponseDataResult,
-  ListRequestQueryParameters,
+  GetPageItems,
 } from '@/types/http';
 import {List} from '@mui/material';
-import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import InfiniteScrollingNotFound from './infiniteScrollingList/InfiniteScrollingNotFound';
-
-type GetPageItems<T> = (
-  payload: ListRequestQueryParameters,
-  router: AppRouterInstance
-) => Promise<T | null>;
 
 export default function InfiniteScrollingList<
   T extends BackendPaginatedResponseDataResult,

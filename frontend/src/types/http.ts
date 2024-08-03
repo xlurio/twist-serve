@@ -1,4 +1,5 @@
-import { PickerValidDate } from "@mui/x-date-pickers";
+import {PickerValidDate} from '@mui/x-date-pickers';
+import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 export enum BackendResponseStatuses {
   SUCCESS = 'success',
@@ -13,6 +14,7 @@ export interface ListRequestQueryParameters {
 
 export interface ListMatchesQueryParameters extends ListRequestQueryParameters {
   player?: number;
+  match_round?: number;
 }
 
 export interface ListTournamentsQueryParameters
@@ -20,6 +22,10 @@ export interface ListTournamentsQueryParameters
   ordering?: 'num_of_subscriptions' | '-num_of_subscriptions';
   start_date__gte?: string;
   subscriptions__player__in?: number;
+}
+
+export interface ListRoundsQueryParameters extends ListRequestQueryParameters {
+  tournament?: number;
 }
 
 export interface CreatePlayerRequest {
@@ -51,6 +57,22 @@ export interface BackendResponse {
   status: BackendResponseStatuses;
   message?: string;
   data?: object;
+}
+
+export interface RetrieveTournamentResponse {
+  data: RetrieveTournamentResponseData;
+}
+
+export interface RetrieveTournamentResponseData {
+  id: number;
+  name: string;
+  avatar: string | null;
+  start_date: string;
+  end_date: string;
+  country: string;
+  city: string;
+  surface: string;
+  slots: number;
 }
 
 export interface CreatePlayerResponse extends BackendResponse {
@@ -93,7 +115,8 @@ export interface GetTokenResponse extends BackendResponse {
 
 export interface BackendPaginatedResponseDataResult {}
 
-export interface ListTournamentsResponseDataResult extends BackendPaginatedResponseDataResult {
+export interface ListTournamentsResponseDataResult
+  extends BackendPaginatedResponseDataResult {
   id: number;
   name: string;
   avatar: string | null;
@@ -110,7 +133,8 @@ export interface BackendPaginatedResponseData {
   results: BackendPaginatedResponseDataResult[];
 }
 
-export interface ListTournamentsResponseData extends BackendPaginatedResponseData {
+export interface ListTournamentsResponseData
+  extends BackendPaginatedResponseData {
   results: ListTournamentsResponseDataResult[];
 }
 
@@ -127,21 +151,20 @@ export interface RefreshTokenResponse extends BackendResponse {
   data: RefreshTokenResponseData;
 }
 
-export interface ListMatchesResponseDataResult extends BackendPaginatedResponseDataResult {
-  id: number;
-  player1: {
-    name: string;
-    sets_won: number;
-  };
-  player2: {
-    name: string;
-    sets_won: number;
-  };
-  date: string;
-  observation: string;
-  tournament_name: string;
+export interface ListMatchResponseDataResultPlayer {
+  previous_match: number | null;
+  name: string | null;
+  sets_won: number;
 }
 
+export interface ListMatchesResponseDataResult
+  extends BackendPaginatedResponseDataResult {
+  id: number;
+  player1: ListMatchResponseDataResultPlayer;
+  player2: ListMatchResponseDataResultPlayer;
+  date: string;
+  observation: string;
+}
 export interface ListMatchesResponseData extends BackendPaginatedResponseData {
   results: ListMatchesResponseDataResult[];
 }
@@ -149,3 +172,23 @@ export interface ListMatchesResponseData extends BackendPaginatedResponseData {
 export interface ListMatchesResponse extends BackendResponse {
   data: ListMatchesResponseData;
 }
+
+export interface ListRoundsResponseDataResult
+  extends BackendPaginatedResponseDataResult {
+  id: number;
+  slug: string;
+  name: string;
+}
+
+export interface ListRoundsResponseData extends BackendPaginatedResponseData {
+  results: ListRoundsResponseDataResult[];
+}
+
+export interface ListRoundsResponse extends BackendResponse {
+  data: ListRoundsResponseData;
+}
+
+export type GetPageItems<T> = (
+  payload: ListRequestQueryParameters,
+  router: AppRouterInstance
+) => Promise<T | null>;

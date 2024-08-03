@@ -2,15 +2,15 @@ import {AxiosError, isAxiosError} from 'axios';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import Cookies from 'js-cookie';
 import {GetAuthenticatedUserResponseData} from '@/types/http';
-import {getAuthenticatedUser, refreshAccessToken} from '@/lib/adapters';
+import {getAccountsMe, postTokenRefresh} from '@/lib/adapters';
 import {cache} from 'react';
 
-export const myAccountData = cache(
+export const retrieveAuthenticatedAccount = cache(
   async (
     router: AppRouterInstance
   ): Promise<GetAuthenticatedUserResponseData | null> => {
     const response = await _refreshOrLogoutOn401({
-      backendRequestCallback: getAuthenticatedUser,
+      backendRequestCallback: getAccountsMe,
       router,
     });
     return response?.data.data || null;
@@ -86,7 +86,7 @@ async function _tryToRefreshToken<T>({
   refreshToken: string;
 }) {
   try {
-    const refreshTokenAccessResponse = await refreshAccessToken({
+    const refreshTokenAccessResponse = await postTokenRefresh({
       refresh: refreshToken,
     });
     const {access, lifetime} = refreshTokenAccessResponse.data.data;

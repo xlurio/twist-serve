@@ -1,17 +1,17 @@
-import {fetchTournaments} from '@/lib/adapters';
+import {getTournament, getTournaments} from '@/lib/adapters';
 import {
   ListTournamentsQueryParameters,
   ListTournamentsResponseData,
 } from '@/types/http';
 import dayjs from 'dayjs';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import {myAccountData} from './accounts';
+import {retrieveAuthenticatedAccount} from './accounts';
 import {cache} from 'react';
 
 async function listTournaments(
   queryParams: ListTournamentsQueryParameters
 ): Promise<ListTournamentsResponseData> {
-  const response = await fetchTournaments(queryParams);
+  const response = await getTournaments(queryParams);
 
   return {
     ...response.data.data,
@@ -29,7 +29,7 @@ async function _listTournamentsForAuthenticatedPlayer(
   queryParams: ListTournamentsQueryParameters,
   router: AppRouterInstance
 ): Promise<ListTournamentsResponseData | null> {
-  const user = await myAccountData(router);
+  const user = await retrieveAuthenticatedAccount(router);
   const playerId = user?.player || null;
 
   if (playerId) {
@@ -45,3 +45,15 @@ async function _listTournamentsForAuthenticatedPlayer(
 export const cachedListTournamentsForAuthenticatedPlayer = cache(
   _listTournamentsForAuthenticatedPlayer
 );
+
+async function retrieveTournament(tournamentId: number) {
+  const response = await getTournament(tournamentId);
+
+  return {
+    ...response.data.data,
+    start_date: dayjs(response.data.data.start_date).format('D MMMM, YYYY'),
+    end_date: dayjs(response.data.data.end_date).format('D MMMM, YYYY'),
+  };
+}
+
+export const cachedRetrieveTournament = cache(retrieveTournament);

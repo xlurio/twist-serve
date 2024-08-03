@@ -6,7 +6,7 @@ import {
   CreatePlayerRequest,
   GetTokenRequest,
 } from '@/types/http';
-import {createPlayer, getToken} from '@/lib/adapters';
+import {postPlayers, postToken} from '@/lib/adapters';
 import {cookies} from 'next/headers';
 import dayjs from 'dayjs';
 import {AxiosError} from 'axios';
@@ -46,7 +46,7 @@ export async function registerFromFormAction(
 
 async function _submitRegisterForm(formData: FormData) {
   try {
-    await createPlayer(_makeRegisterPayloadFromFormData(formData));
+    await postPlayers(_makeRegisterPayloadFromFormData(formData));
   } catch (error) {
     console.trace(error);
     console.error((error as AxiosError<BackendResponse>).response?.data.data);
@@ -110,7 +110,7 @@ async function _loginOnServerSide({
 }: {
   rememberMe?: boolean;
 } & GetTokenRequest) {
-  const response = await getToken({email, password});
+  const response = await postToken({email, password});
   if (rememberMe) {
     cookies().set('token', response.data.data.access);
     cookies().set({

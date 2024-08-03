@@ -1,6 +1,6 @@
 import {BackendResponse, GetTokenRequest} from '@/types/http';
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import {getToken} from '../../adapters';
+import {postToken} from '../../adapters';
 import {AxiosError, isAxiosError} from 'axios';
 import {CustomThunkDispatch} from '@/types';
 import {setMessage} from '../../features/snackBarSlice';
@@ -25,7 +25,7 @@ export async function login({
 }: {
   rememberMe?: boolean;
 } & GetTokenRequest) {
-  const response = await getToken({email, password});
+  const response = await postToken({email, password});
   if (rememberMe) {
     document.cookie =
       `token=${response.data.data.access};` +

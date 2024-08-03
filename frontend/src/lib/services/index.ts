@@ -1,6 +1,6 @@
 import {Dispatch} from 'react';
 import {MissingActionRequiredValue} from '../errors';
-import {createPlayer} from '../adapters';
+import {postPlayers} from '../adapters';
 import {isAxiosError} from 'axios';
 import {CreatePlayerRequest} from '@/types/http';
 import {ReducerAction, ReducerActionType, ReducerState} from '@/types/reducers';
@@ -28,8 +28,8 @@ export function executeReducerAction<
   return newState;
 }
 
-export async function register(data: CreatePlayerRequest) {
-  const response = await createPlayer(data);
+export async function registerPlayer(data: CreatePlayerRequest) {
+  const response = await postPlayers(data);
   return response;
 }
 
